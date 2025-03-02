@@ -7,12 +7,12 @@ import { API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, 
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAlqVm-CVwjALFrmsnLS_ONiGVFzKN_H4s",
-  authDomain: "apptareas-8033d.firebaseapp.com",
-  projectId: "apptareas-8033d",
-  storageBucket: "apptareas-8033d.firebasestorage.app",
-  messagingSenderId: "374046613735",
-  appId: "1:374046613735:web:653ae1113a7918f7164242"
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
 };
 
 // Initialize Firebase

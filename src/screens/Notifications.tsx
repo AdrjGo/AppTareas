@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-export default function Home() {
+export default function Notifications() {
   return (
     <View>
-      <Text className="text-white"> To-Do </Text>
+      <Text className="text-white"> Notificaciones </Text>
     </View>
   );
 }

@@ -6,6 +6,8 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import appFirebase from "@/config/firebaseConfig";
 import ButtonLigth from "@/components/common/buttons/ButtonLigth";
@@ -19,8 +21,8 @@ export default function Login(props: any) {
   const handleLogin = async () => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert("Usuario logueado", `Bienvenido ${user.email}`);
-      props.navigation.navigate("Home");
+      // Alert.alert("Usuario logueado", `Bienvenido ${user.email}`);
+      props.navigation.replace("Main");
     } catch (error) {
       console.log(error);
       Alert.alert(
@@ -38,7 +40,7 @@ export default function Login(props: any) {
         password
       );
       Alert.alert("Usuario registrado", `Bienvenido ${user.email}`);
-      props.navigation.navigate("Home");
+      props.navigation.navigate("Main");
     } catch (error) {
       console.log(error);
       Alert.alert(
