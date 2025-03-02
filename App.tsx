@@ -65,7 +65,7 @@ export default function App() {
   const Stack = createStackNavigator();
   function MyStack() {
     return (
-      <Stack.Navigator initialRouteName="Main">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
           component={Login}
@@ -83,7 +83,7 @@ export default function App() {
   return (
     <NavigationContainer theme={DarkThemeCustom}>
       <MyStack />
-      <StatusBar style="light" />
+      <StatusBar style={colorScheme === "dark" ? "dark" : "light"} />
     </NavigationContainer>
   );
 }

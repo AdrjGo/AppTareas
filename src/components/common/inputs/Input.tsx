@@ -18,6 +18,7 @@ function Input({ placeholder, label, isPassword, onChangeTexto }: Props) {
         placeholderTextColor="rgba(255, 255, 255, 0.6)"
         secureTextEntry={isPassword}
         onChangeText={onChangeTexto}
+        keyboardAppearance="dark"
       />
     </View>
   );
