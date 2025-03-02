@@ -2,7 +2,11 @@ import ButtonOpacity from "@/components/common/buttons/ButtonOpacity";
 import Input from "@/components/common/inputs/Input";
 import React, { useState } from "react";
 import { Alert, Text, View } from "react-native";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 import appFirebase from "@/config/firebaseConfig";
 import ButtonLigth from "@/components/common/buttons/ButtonLigth";
 
@@ -19,7 +23,28 @@ export default function Login(props: any) {
       props.navigation.navigate("Home");
     } catch (error) {
       console.log(error);
-      Alert.alert("Error", "Correo o contraseña incorrecta");
+      Alert.alert(
+        "¡Ups!",
+        "Algo no está bien. Revisa tu correo y contraseña e inténtalo de nuevo."
+      );
+    }
+  };
+
+  const handleRegister = async () => {
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      Alert.alert("Usuario registrado", `Bienvenido ${user.email}`);
+      props.navigation.navigate("Home");
+    } catch (error) {
+      console.log(error);
+      Alert.alert(
+        "Correo ya registrado",
+        "Parece que ya estuviste aquí antes. Ese correo ya está registrado, prueba iniciar sesión."
+      );
     }
   };
 
@@ -51,7 +76,11 @@ export default function Login(props: any) {
           onPress={handleLogin}
           colorText="blanco"
         />
-        <ButtonLigth text="Registrarse" colorText="verde" onPress={(e:any) => {Alert.alert("Registro", "En proceso")}} />
+        <ButtonLigth
+          text="Registrarse"
+          colorText="verde"
+          onPress={handleRegister}
+        />
       </View>
     </View>
   );
