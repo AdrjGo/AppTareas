@@ -4,13 +4,28 @@ import { Colors } from "@/constants/Colors";
 import { twMerge } from "@/utils/twMerge";
 
 interface Props {
-  text: string;
-  colorBg?: "negro" | "azulOscuro" | "verde" | "rojo" | "amarillo";
+  text?: string;
+  colorBg?:
+    | "negro"
+    | "azulOscuro"
+    | "verde"
+    | "rojo"
+    | "amarillo"
+    | "transparent";
   onPress?: any;
   colorText?: "blanco" | "azulOscuro" | "verde" | "rojo" | "amarillo";
+  children?: any;
+  className?: any;
 }
 
-function ButtonOpacity({ text, colorBg, onPress, colorText }: Props) {
+function ButtonOpacity({
+  text,
+  colorBg,
+  onPress,
+  colorText,
+  children,
+  className,
+}: Props) {
   const getColorText = () => {
     switch (colorText) {
       case "blanco":
@@ -39,15 +54,17 @@ function ButtonOpacity({ text, colorBg, onPress, colorText }: Props) {
         return "bg-[#f43f]";
       case "amarillo":
         return "bg-[#f5a623]";
+      case "transparent":
+        return "bg-transparent";
       default:
         return "bg-[#ffffff]";
     }
   };
   return (
-    <View className="my-1">
+    <>
       <TouchableOpacity
         onPress={onPress}
-        className={twMerge("rounded-md py-3", getColorBg())}
+        className={twMerge(`rounded-md py-3 ${className}`, getColorBg())}
       >
         <Text
           className={twMerge(
@@ -56,9 +73,10 @@ function ButtonOpacity({ text, colorBg, onPress, colorText }: Props) {
           )}
         >
           {text}
+          {children}
         </Text>
       </TouchableOpacity>
-    </View>
+    </>
   );
 }
 

@@ -2,6 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-    @apply bg-black text-white;
-  }
