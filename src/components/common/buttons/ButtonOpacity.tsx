@@ -5,17 +5,15 @@ import { twMerge } from "@/utils/twMerge";
 
 interface Props {
   text?: string;
-  colorBg?:
-    | "negro"
-    | "azulOscuro"
-    | "verde"
-    | "rojo"
-    | "amarillo"
-    | "transparent";
+  colorBg?: "black" | "darkBlue" | "green" | "red" | "yellow" | "gray" | "white";
   onPress?: any;
-  colorText?: "blanco" | "azulOscuro" | "verde" | "rojo" | "amarillo";
+  colorText?: "blanco" | "darkBlue" | "green" | "red" | "yellow";
   children?: any;
+  textAlign?: "left" | "center" | "right";
+  textSize?: "big" | "medium" | "small";
+  textFont?: "light" | "medium" | "bold";
   className?: any;
+  rounded?: "big" | "medium" | "small";
 }
 
 function ButtonOpacity({
@@ -24,52 +22,114 @@ function ButtonOpacity({
   onPress,
   colorText,
   children,
+  textAlign,
+  textSize,
+  textFont,
   className,
+  rounded
 }: Props) {
   const getColorText = () => {
     switch (colorText) {
       case "blanco":
         return "text-[#ffffff]";
-      case "azulOscuro":
+      case "darkBlue":
         return "text-[#103347]";
-      case "verde":
+      case "green":
         return "text-[#3ac867]";
-      case "rojo":
+      case "red":
         return "text-[#f43f]";
-      case "amarillo":
+      case "yellow":
         return "text-[#f5a623]";
       default:
         return "text-[#000000]";
     }
   };
+
   const getColorBg = () => {
     switch (colorBg) {
-      case "negro":
+      case "black":
         return "bg-[#000000]";
-      case "azulOscuro":
+        case "white":
+        return "bg-white";
+      case "darkBlue":
         return "bg-[#103347]";
-      case "verde":
+      case "green":
         return "bg-[#3ac867]";
-      case "rojo":
+      case "red":
         return "bg-[#f43f]";
-      case "amarillo":
+      case "yellow":
         return "bg-[#f5a623]";
-      case "transparent":
-        return "bg-transparent";
+      case "gray":
+        return "bg-gray-common";
       default:
-        return "bg-[#ffffff]";
+        return "bg-transparent";
     }
   };
+
+  const getTextAlign = () => {
+    switch (textAlign) {
+      case "left":
+        return "text-left";
+      case "center":
+        return "text-center";
+      case "right":
+        return "text-right";
+      default:
+        return "text-left";
+    }
+  };
+
+  const getTextSize = () => {
+    switch (textSize) {
+      case "big":
+        return "text-2xl";
+      case "medium":
+        return "text-xl";
+      case "small":
+        return "text-base";
+      default:
+        return "text-lg";
+    }
+  };
+
+  const getTextFont = () => {
+    switch (textFont) {
+      case "light":
+        return "font-light";
+      case "medium":
+        return "font-medium";
+      case "bold":
+        return "font-bold";
+      default:
+        return "font-normal";
+    }
+  };
+
+  const getRounded = ()=>{
+    switch(rounded){
+      case "big":
+        return "rounded-lg"
+      case "medium":
+        return "rounded-md"
+      case "small":
+        return "rounded-sm"
+      default:
+        return ""
+    }
+  }
   return (
     <>
       <TouchableOpacity
         onPress={onPress}
-        className={twMerge(`rounded-md py-3 ${className}`, getColorBg())}
+        className={twMerge(`py-3 ${className}`, getColorBg(), getRounded())}
       >
         <Text
           className={twMerge(
             "text-center text-xl font-semibold",
-            getColorText()
+            getColorText(),
+            getTextAlign(),
+            getTextSize(),
+            getTextFont()
           )}
         >
           {text}

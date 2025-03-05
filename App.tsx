@@ -15,12 +15,14 @@ import { IconSymbol } from "@/components/ui/IconSymbol";
 import ButtonOpacity from "@/components/common/buttons/ButtonOpacity";
 import { addList } from "@/services/firebaseList";
 import { Alert } from "react-native";
+import TaskList from "@/screens/TaskList";
+import ModalAddTask from "@/screens/ModalAddTask";
 // import ModalScreen from "@/screens/AddList";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function MyTabs({ navigation }: any) {
+function MyTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -41,9 +43,10 @@ function MyTabs({ navigation }: any) {
           ),
           headerRight: () => (
             <ButtonOpacity
-              colorBg="transparent"
               className={"mr-4"}
-              onPress={() => {addList(), Alert.alert("Lista creada")}}
+              onPress={() => {
+                addList(), Alert.alert("Lista creada");
+              }}
             >
               <IconSymbol name="plus" color="white" style={{ fontSize: 25 }} />
             </ButtonOpacity>
@@ -99,16 +102,21 @@ export default function App() {
             component={MyTabs}
             options={{ headerShown: false }}
           />
-        </Stack.Group>
-        {/* <Stack.Group screenOptions={{ presentation: "modal" }}>
           <Stack.Screen
-            name="MyModal"
-            component={ModalScreen}
-            options={{ title: "Añadir Lista",
-              headerBackTitle: "Atrás",
+            name="List"
+            component={TaskList}
+            options={{ headerShown: true, headerBackTitle: "Atrás", headerTitle: "Lista" }}
+          />
+        </Stack.Group>
+        <Stack.Group screenOptions={{ presentation: "modal" }}>
+          <Stack.Screen
+            name="ModalAddTask"
+            component={ModalAddTask}
+            options={{ title: "Añadir Tarea",
+              headerBackTitle: "Lista",
              }}
           />
-        </Stack.Group> */}
+        </Stack.Group>
       </Stack.Navigator>
       <StatusBar style={colorScheme === "dark" ? "dark" : "light"} />
     </NavigationContainer>

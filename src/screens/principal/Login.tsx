@@ -75,7 +75,7 @@ export default function Login(props: any) {
       <View>
         <ButtonOpacity
           text="Iniciar Sesión"
-          colorBg="verde"
+          colorBg="green"
           onPress={handleLogin}
           colorText="blanco"
         />

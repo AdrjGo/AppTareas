@@ -1,4 +1,4 @@
-import { getDatabase, ref, set, push, get } from "firebase/database";
+import { ref, set, push, get } from "firebase/database";
 import { auth, db } from "@/config/firebaseConfig";
 
 export const addList = async () => {
@@ -13,8 +13,9 @@ export const addList = async () => {
 
   await set(newListRef, {
     name: "Nueva Lista",
-    tasks: {},
+    tasks: [],
     order: listCount + 1,
     dateCreated: new Date().toISOString(),
   });
 };
+

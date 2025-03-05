@@ -5,11 +5,12 @@ import { TextInput, View } from "react-native";
 interface Props {
   placeholder?: string;
   icon: any;
+  className?: any;
 }
 
-function InputIcon({ placeholder, icon }: Props) {
+function InputIcon({ placeholder, icon, className }: Props) {
   return (
-    <View className=" bg-gray-common p-2 rounded-xl w-[90%] gap-3 flex-row items-center ">
+    <View className="bg-gray-common p-2 rounded-xl w-[90%] gap-3 flex-row items-center ">
       <IconSymbol name={icon} color="white" />
       <TextInput
         className="text-white"

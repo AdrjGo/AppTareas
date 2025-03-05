@@ -3,16 +3,12 @@ import ButtonNative from "@/components/common/buttons/ButtonNative";
 import InputIcon from "@/components/common/inputs/InputIcon";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { auth, db } from "@/config/firebaseConfig";
+import { useNavigation } from "expo-router";
 import { onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  FlatList,
-  Text,
-  View,
-} from "react-native";
+import { Alert, FlatList, Text, View } from "react-native";
 
-export default function Todo() {
+export default function Todo(props: any) {
   const [listas, setListas] = useState<{ id: string; name: string }[]>([]);
   const user = auth.currentUser;
 
@@ -54,7 +50,12 @@ export default function Todo() {
           keyExtractor={(item) => item.id}
           className="p-4 "
           renderItem={({ item }) => (
-            <ButtonLigth  colorText="blanco" colorBg="gray" colorBgPress="darkBlue" onPress={() => Alert.alert("hola")}>
+            <ButtonLigth
+              colorText="blanco"
+              colorBg="gray"
+              colorBgPress="darkBlue"
+              onPress={() =>  props.navigation.navigate("List")}
+            >
               {item.name}
             </ButtonLigth>
           )}
