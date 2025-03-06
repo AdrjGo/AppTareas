@@ -9,7 +9,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import appFirebase from "@/config/firebaseConfig";
+import { appFirebase } from "@/config/firebaseConfig";
 import ButtonLigth from "@/components/common/buttons/ButtonLigth";
 
 const auth = getAuth(appFirebase);
@@ -59,6 +59,7 @@ export default function Login(props: any) {
         <Input
           placeholder="ejemplo@gmail.com"
           label="Correo"
+          keyboardType={"email-address"}
           onChangeTexto={(e: any) => {
             setEmail(e);
           }}
@@ -74,13 +75,17 @@ export default function Login(props: any) {
       <View>
         <ButtonOpacity
           text="Iniciar Sesión"
-          colorBg="verde"
+          colorBg="green"
+          rounded="medium"
           onPress={handleLogin}
           colorText="blanco"
         />
         <ButtonLigth
           text="Registrarse"
-          colorText="verde"
+          colorText="green"
+          
+          textAlign="center"
+          textSize="medium"
           onPress={handleRegister}
         />
       </View>

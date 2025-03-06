@@ -1,66 +1,156 @@
 import React from "react";
-import { Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
-import { Colors } from "@/constants/Colors";
+import { Text, TouchableHighlight, View } from "react-native";
 import { twMerge } from "@/utils/twMerge";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 interface Props {
-  text: string;
-  colorBg?: "negro" | "azulOscuro" | "verde" | "rojo" | "amarillo";
+  text?: string;
+  colorBg?: "black" | "darkBlue" | "green" | "red" | "yellow" | "gray" | "zinc";
   onPress?: any;
-  colorText?: "blanco" | "azulOscuro" | "verde" | "rojo" | "amarillo";
+  colorBgPress?:
+    | "black"
+    | "darkBlue"
+    | "green"
+    | "red"
+    | "yellow"
+    | "gray"
+    | "zinc";
+  colorText?: "blanco" | "darkBlue" | "green" | "red" | "yellow";
+  children?: any;
+  textAlign?: "left" | "center" | "right";
+  textSize?: "big" | "medium" | "small";
+  textFont?: "light" | "medium" | "bold";
+  className?: any;
 }
 
-function ButtonLigth({ text, colorBg, onPress, colorText }: Props) {
+function ButtonLigth({
+  text,
+  colorBg,
+  colorBgPress,
+  onPress,
+  colorText,
+  children,
+  textAlign,
+  textSize,
+  textFont,
+  className,
+}: Props) {
   const getColorText = () => {
     switch (colorText) {
       case "blanco":
         return "text-[#ffffff]";
-      case "azulOscuro":
+      case "darkBlue":
         return "text-[#103347]";
-      case "verde":
+      case "green":
         return "text-[#3ac867]";
-      case "rojo":
+      case "red":
         return "text-[#f43f]";
-      case "amarillo":
+      case "yellow":
         return "text-[#f5a623]";
       default:
         return "text-[#000000]";
     }
   };
-  const getColorBg = () => {
-    switch (colorBg) {
-      case "negro":
-        return "#000000";
-      case "azulOscuro":
+
+  const getColorBgPress = () => {
+    switch (colorBgPress) {
+      case "black":
+        return "black";
+      case "darkBlue":
         return "#103347";
-      case "verde":
+      case "green":
         return "#3ac867";
-      case "rojo":
+      case "red":
         return "#f43f";
-      case "amarillo":
+      case "yellow":
         return "#f5a623";
+      case "gray":
+        return "#2c2c2e";
+      case "zinc":
+        return "#777777";
       default:
-        return "#ffffff";
+        return "white";
     }
   };
+
+  const getColorBg = () => {
+    switch (colorBg) {
+      case "black":
+        return "bg-[#000000]";
+      case "darkBlue":
+        return "bg-[#103347]";
+      case "green":
+        return "bg-[#3ac867]";
+      case "red":
+        return "bg-[#f43f]";
+      case "yellow":
+        return "bg-[#f5a623]";
+      case "gray":
+        return "bg-gray-common";
+      case "zinc":
+        return "bg-zinc-800";
+      default:
+        return "bg-transparent";
+    }
+  };
+
+  const getTextAlign = () => {
+    switch (textAlign) {
+      case "left":
+        return "text-left";
+      case "center":
+        return "text-center";
+      case "right":
+        return "text-right";
+      default:
+        return "text-left";
+    }
+  };
+
+  const getTextSize = () => {
+    switch (textSize) {
+      case "big":
+        return "text-2xl";
+      case "medium":
+        return "text-xl";
+      case "small":
+        return "text-base";
+      default:
+        return "text-lg";
+    }
+  };
+
+  const getTextFont = () => {
+    switch (textFont) {
+      case "light":
+        return "font-light";
+      case "medium":
+        return "font-medium";
+      case "bold":
+        return "font-bold";
+      default:
+        return "font-normal";
+    }
+  };
+
   return (
-    <View className="my-1">
-      <TouchableHighlight
-        onPress={onPress}
-        underlayColor={getColorBg()}
-        className="rounded-md py-3"
+    <TouchableHighlight
+      onPress={onPress}
+      underlayColor={getColorBgPress()}
+      className={twMerge(`rounded-md p-3 my-1 ${className}`, getColorBg())}
+    >
+      <Text
+        className={twMerge(
+          "text-xl font-semibold font",
+          getColorText(),
+          getTextAlign(),
+          getTextSize(),
+          getTextFont()
+        )}
       >
-        <Text
-          className={twMerge(
-            "text-center text-xl font-semibold",
-            getColorText()
-          )}
-        >
-          {text}
-        </Text>
-      </TouchableHighlight>
-    </View>
+        {text}
+        {children}
+      </Text>
+    </TouchableHighlight>
   );
 }
 
