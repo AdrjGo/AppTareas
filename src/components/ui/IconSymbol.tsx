@@ -16,6 +16,9 @@ const MAPPING = {
   'magnifyingglass': 'search',
   'clock': 'schedule',
   'plus': 'add',
+  'ellipsis': 'more-horiz',
+  'book': 'book',
+  'text.alignleft': 'text-snippet',
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],

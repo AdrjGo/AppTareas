@@ -76,12 +76,14 @@ export default function Login(props: any) {
         <ButtonOpacity
           text="Iniciar Sesión"
           colorBg="green"
+          rounded="medium"
           onPress={handleLogin}
           colorText="blanco"
         />
         <ButtonLigth
           text="Registrarse"
           colorText="green"
+          
           textAlign="center"
           textSize="medium"
           onPress={handleRegister}

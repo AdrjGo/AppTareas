@@ -5,7 +5,15 @@ import { twMerge } from "@/utils/twMerge";
 
 interface Props {
   text?: string;
-  colorBg?: "black" | "darkBlue" | "green" | "red" | "yellow" | "gray" | "white";
+  colorBg?:
+    | "black"
+    | "darkBlue"
+    | "green"
+    | "red"
+    | "yellow"
+    | "gray"
+    | "white"
+    | "blue";
   onPress?: any;
   colorText?: "blanco" | "darkBlue" | "green" | "red" | "yellow";
   children?: any;
@@ -26,12 +34,14 @@ function ButtonOpacity({
   textSize,
   textFont,
   className,
-  rounded
+  rounded,
 }: Props) {
   const getColorText = () => {
     switch (colorText) {
       case "blanco":
         return "text-[#ffffff]";
+      case "darkBlue":
+        return "text-[#103347]";
       case "darkBlue":
         return "text-[#103347]";
       case "green":
@@ -49,10 +59,12 @@ function ButtonOpacity({
     switch (colorBg) {
       case "black":
         return "bg-[#000000]";
-        case "white":
+      case "white":
         return "bg-white";
       case "darkBlue":
         return "bg-[#103347]";
+      case "blue":
+        return "bg-blue-500";
       case "green":
         return "bg-[#3ac867]";
       case "red":
@@ -105,23 +117,23 @@ function ButtonOpacity({
     }
   };
 
-  const getRounded = ()=>{
-    switch(rounded){
+  const getRounded = () => {
+    switch (rounded) {
       case "big":
-        return "rounded-lg"
+        return "rounded-lg";
       case "medium":
-        return "rounded-md"
+        return "rounded-md";
       case "small":
-        return "rounded-sm"
+        return "rounded-sm";
       default:
-        return ""
+        return "";
     }
-  }
+  };
   return (
     <>
       <TouchableOpacity
         onPress={onPress}
-        className={twMerge(`py-3 ${className}`, getColorBg(), getRounded())}
+        className={twMerge(`p-3 ${className}`, getColorBg(), getRounded())}
       >
         <Text
           className={twMerge(

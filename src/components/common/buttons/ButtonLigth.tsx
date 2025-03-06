@@ -4,14 +4,22 @@ import { twMerge } from "@/utils/twMerge";
 
 interface Props {
   text?: string;
-  colorBg?: "black" | "darkBlue" | "green" | "red" | "yellow" | "gray";
+  colorBg?: "black" | "darkBlue" | "green" | "red" | "yellow" | "gray" | "zinc";
   onPress?: any;
-  colorBgPress?: "black" | "darkBlue" | "green" | "red" | "yellow" | "gray";
+  colorBgPress?:
+    | "black"
+    | "darkBlue"
+    | "green"
+    | "red"
+    | "yellow"
+    | "gray"
+    | "zinc";
   colorText?: "blanco" | "darkBlue" | "green" | "red" | "yellow";
   children?: any;
   textAlign?: "left" | "center" | "right";
   textSize?: "big" | "medium" | "small";
   textFont?: "light" | "medium" | "bold";
+  className?: any;
 }
 
 function ButtonLigth({
@@ -24,6 +32,7 @@ function ButtonLigth({
   textAlign,
   textSize,
   textFont,
+  className,
 }: Props) {
   const getColorText = () => {
     switch (colorText) {
@@ -41,7 +50,7 @@ function ButtonLigth({
         return "text-[#000000]";
     }
   };
-  
+
   const getColorBgPress = () => {
     switch (colorBgPress) {
       case "black":
@@ -55,7 +64,9 @@ function ButtonLigth({
       case "yellow":
         return "#f5a623";
       case "gray":
-        return "";
+        return "#2c2c2e";
+      case "zinc":
+        return "#777777";
       default:
         return "white";
     }
@@ -73,8 +84,10 @@ function ButtonLigth({
         return "bg-[#f43f]";
       case "yellow":
         return "bg-[#f5a623]";
-        case "gray":
-          return "bg-gray-common";  
+      case "gray":
+        return "bg-gray-common";
+      case "zinc":
+        return "bg-zinc-800";
       default:
         return "bg-transparent";
     }
@@ -120,24 +133,24 @@ function ButtonLigth({
   };
 
   return (
-      <TouchableHighlight
-        onPress={onPress}
-        underlayColor={getColorBgPress()}
-        className={twMerge("rounded-md p-3 my-1 ", getColorBg())}
+    <TouchableHighlight
+      onPress={onPress}
+      underlayColor={getColorBgPress()}
+      className={twMerge(`rounded-md p-3 my-1 ${className}`, getColorBg())}
+    >
+      <Text
+        className={twMerge(
+          "text-xl font-semibold font",
+          getColorText(),
+          getTextAlign(),
+          getTextSize(),
+          getTextFont()
+        )}
       >
-        <Text
-          className={twMerge(
-            "text-xl font-semibold font",
-            getColorText(),
-            getTextAlign(),
-            getTextSize(),
-            getTextFont()
-          )}
-        >
-          {text}
-          {children}
-        </Text>
-      </TouchableHighlight>
+        {text}
+        {children}
+      </Text>
+    </TouchableHighlight>
   );
 }
 

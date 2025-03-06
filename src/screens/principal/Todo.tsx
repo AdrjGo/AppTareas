@@ -3,10 +3,9 @@ import ButtonNative from "@/components/common/buttons/ButtonNative";
 import InputIcon from "@/components/common/inputs/InputIcon";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { auth, db } from "@/config/firebaseConfig";
-import { useNavigation } from "expo-router";
 import { onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
-import { Alert, FlatList, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 
 export default function Todo(props: any) {
   const [listas, setListas] = useState<{ id: string; name: string }[]>([]);
@@ -34,8 +33,8 @@ export default function Todo(props: any) {
 
   return (
     <>
-      <View className="my-5 justify-center items-center">
-        <InputIcon placeholder="Listas de tareas" icon="magnifyingglass" />
+      <View className="m-5 justify-center items-center ">
+        <InputIcon placeholder="Listas de tareas" icon="magnifyingglass" stylesView="search" stylesInput="search" />
       </View>
 
       <View className="flex-row items-center mx-5 my-3 gap-3">
@@ -44,17 +43,22 @@ export default function Todo(props: any) {
           Tus listas
         </Text>
       </View>
-      <View className="bg-zinc-950 rounded-xl">
+      <View className="">
         <FlatList
           data={listas}
           keyExtractor={(item) => item.id}
-          className="p-4 "
           renderItem={({ item }) => (
             <ButtonLigth
               colorText="blanco"
-              colorBg="gray"
-              colorBgPress="darkBlue"
-              onPress={() =>  props.navigation.navigate("List")}
+              colorBg="zinc"
+              colorBgPress="gray"
+              className={"border-b-2 border-zinc-500 rounded-none"}
+              onPress={() =>
+                props.navigation.navigate("List", {
+                  listName: item.name,
+                  listId: item.id,
+                })
+              }
             >
               {item.name}
             </ButtonLigth>

@@ -14,10 +14,11 @@ import Settings from "@/screens/principal/Settings";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import ButtonOpacity from "@/components/common/buttons/ButtonOpacity";
 import { addList } from "@/services/firebaseList";
-import { Alert } from "react-native";
+import { Alert, View } from "react-native";
 import TaskList from "@/screens/TaskList";
 import ModalAddTask from "@/screens/ModalAddTask";
-// import ModalScreen from "@/screens/AddList";
+import Modals from "@/components/common/Modals";
+import EditListModal from "./src/screens/EditListModal";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -105,16 +106,25 @@ export default function App() {
           <Stack.Screen
             name="List"
             component={TaskList}
-            options={{ headerShown: true, headerBackTitle: "Atrás", headerTitle: "Lista" }}
+            options={({ route }: any) => ({
+              headerShown: true,
+              headerBackTitle: "Atrás",
+              headerTitle: route.params?.listName || "Lista",
+              headerRight: () => (
+                <EditListModal
+                  listId={route.params?.listId}
+                  listName={route.params?.listName}
+                />
+              ),
+            })}
           />
         </Stack.Group>
+
         <Stack.Group screenOptions={{ presentation: "modal" }}>
           <Stack.Screen
             name="ModalAddTask"
             component={ModalAddTask}
-            options={{ title: "Añadir Tarea",
-              headerBackTitle: "Lista",
-             }}
+            options={{ title: "Añadir Tarea", headerBackTitle: "Atrás" }}
           />
         </Stack.Group>
       </Stack.Navigator>
