@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
+    "@react-native-picker/picker": "^2.11.0",
     "@react-navigation/bottom-tabs": "^7.2.1",
     "@react-navigation/stack": "^7.1.1",
     "@types/react": "~18.3.12",
     "expo": "~52.0.37",
+    "expo-checkbox": "~4.0.1",
     "expo-router": "~4.0.17",
     "expo-status-bar": "~2.0.1",
     "expo-symbols": "~0.2.2",

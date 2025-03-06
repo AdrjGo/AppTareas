@@ -1,7 +1,11 @@
 import ButtonNative from "@/components/common/buttons/ButtonNative";
 import InputIcon from "@/components/common/inputs/InputIcon";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { Picker } from "@react-native-picker/picker";
+import Checkbox from "expo-checkbox";
+import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Alert, ScrollView, Text, TextInput, View } from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 import DateTimePicker, {
   DateType,
   getDefaultStyles,
@@ -11,6 +15,8 @@ export default function ModalAddTask(props: any) {
   const defaultStyles = getDefaultStyles();
   const [selected, setSelected] = useState<DateType>();
   let today = new Date();
+
+  const [selectedPriority, setSelectedPriority] = useState();
 
   return (
     <ScrollView>
@@ -28,18 +34,31 @@ export default function ModalAddTask(props: any) {
           stylesView="formTaskTextArea"
           stylesInput="formTaskTextArea"
           multiLine={true}
+          className={"z-50"}
         />
 
-        <View className="bg-zinc-800 justify-start" style={{ height: 50 }}>
-          <TextInput
-            placeholder="Etiquetas..."
-            className="text-white p-3"
-            placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
-          />
+        <View
+          className="bg-zinc-800 justify-start flex-row items-center z-0"
+          style={{ height: 80 }}
+        >
+          <Picker
+            selectedValue={selectedPriority}
+            onValueChange={(itemValue) => setSelectedPriority(itemValue)}
+            style={{ width: "100%", color: "white" }}
+            dropdownIconColor="white"
+            itemStyle={{ color: "white" }}
+          >
+            <Picker.Item label="Prioridad alta" value="alta" />
+            <Picker.Item label="Prioridad media" value="media" />
+            <Picker.Item label="Prioridad baja" value="baja" />
+          </Picker>
         </View>
 
-        <View className="bg-white justify-start">
-          <Text className="text-zinc-400 p-3 text-">Fecha final...</Text>
+        <View className="bg-zinc-800 justify-start">
+          <View className="flex-row items-center px-3">
+            <IconSymbol name="calendar" color="white" />
+            <Text className="text-zinc-400 p-3 text-">Fecha final...</Text>
+          </View>
           <DateTimePicker
             mode="single"
             date={selected}
@@ -50,8 +69,10 @@ export default function ModalAddTask(props: any) {
             use12Hours={true}
             styles={{
               ...defaultStyles,
-              
-
+              button_next: {
+                ...defaultStyles.button_next,
+                color: "white",
+              },
             }}
           />
         </View>

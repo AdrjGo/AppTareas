@@ -43,7 +43,7 @@ function InputIcon({
 
   return (
     <View
-      className={twMerge("flex-row gap-3", getStyleViewDefined())}
+      className={twMerge(`flex-row gap-3 ${className}`, getStyleViewDefined())}
     >
       <IconSymbol name={icon} color="white" />
       <TextInput
