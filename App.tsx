@@ -19,6 +19,7 @@ import TaskList from "@/screens/TaskList";
 import ModalAddTask from "@/screens/ModalAddTask";
 import Modals from "@/components/common/Modals";
 import EditListModal from "./src/screens/EditListModal";
+import CardTask from "@/components/CardTask";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -118,6 +119,7 @@ export default function App() {
               ),
             })}
           />
+          <Stack.Screen name="CardTask" component={CardTask} />
         </Stack.Group>
 
         <Stack.Group screenOptions={{ presentation: "modal" }}>

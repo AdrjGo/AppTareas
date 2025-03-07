@@ -68,7 +68,37 @@ export const getAllTasks = async (listId: string, setTask: any) => {
   });
 };
 
-export const updateCompletedTask = async (listId: string, taskId: string, completed: boolean) => {
+export const getTaskById = async (listId: string, taskId: string) => {
+  const user = auth.currentUser;
+  if (!user) throw new Error("No se ha iniciado sesión");
+
+  const taskRef = ref(db, `users/${user.uid}/lists/${listId}/tasks/${taskId}`);
+  const snapshot = await get(taskRef);
+
+  if (snapshot.exists()) {
+    const data = snapshot.val();
+    console.log(data);
+    return {
+      id: taskId,
+      title: data.title,
+      description: data.description,
+      dateCreated: data.dateCreated,
+      dateEndTask: data.dateEndTask,
+      completed: data.completed,
+      priority: data.priority,
+    };
+  } else {
+    throw new Error("Tarea no encontrada");
+  }
+};
+// getTaskById("-OKiStqH-4BQO90punCe", "-OKiSyZWvlTncwhUqO5O"
+// );
+
+export const updateCompletedTask = async (
+  listId: string,
+  taskId: string,
+  completed: boolean
+) => {
   const user = auth.currentUser;
   if (!user) return;
 
@@ -77,7 +107,6 @@ export const updateCompletedTask = async (listId: string, taskId: string, comple
   try {
     await update(taskRef, {
       completed: completed,
-      
     });
     console.log("Tarea actualizada correctamente");
   } catch (error) {

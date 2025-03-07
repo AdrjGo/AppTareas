@@ -6,16 +6,21 @@ import { addTask } from "@/services/firebaseTask";
 import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
-import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import { DateType } from "react-native-ui-datepicker";
 
 export default function ModalAddTask(props: any) {
-  const [selected, setSelected] = useState<DateType>();
-  let today = new Date();
+  const { task } = props.route.params;
 
-  const [selectedPriority, setSelectedPriority] = useState<string>("media");
+  const [title, setTitle] = useState(task ? task.title : "");
+  const [description, setDescription] = useState(task ? task.description : "");
+  const [selectedPriority, setSelectedPriority] = useState<string>(
+    task ? task.priority : "media"
+  );
+  const [selected, setSelected] = useState<DateType | undefined>(
+    task ? new Date(task.dateEndTask) : undefined
+  );
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  
 
   const handlerSubmit = async () => {
     if (!props.route.params?.listId) {

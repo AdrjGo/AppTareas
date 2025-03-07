@@ -3,29 +3,47 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { IconSymbol } from "./ui/IconSymbol";
 import ButtonOpacity from "./common/buttons/ButtonOpacity";
 import { formatDate } from "@/utils/formatDate";
+import { getTaskById } from "@/services/firebaseTask";
+import { useRoute } from "@react-navigation/native";
 
-type taskCard = {
-  item: any;
-  handleCheck: (item: any) => void;
-};
+// type taskCard = {
+//   item: any;
+//   handleCheck: (item: any) => void;
+// };
 
-function CardTask({ item, handleCheck }: taskCard) {
+function CardTask(props: any) {
+  const { item, handleCheck } = props;
+  const route = useRoute();  
   return (
     <View className="w-full px-3 my-2 bg-zinc-800 rounded-lg flex-row items-center gap-3">
       <TouchableOpacity
-        className={`size-8 rounded-full border-2 flex items-center justify-center ${
-          item.completed
-            ? "bg-green-500 border-green-500"
-            : "bg-transparent border-gray-400"
-        }`}
+        className="justify-center"
         onPress={() => handleCheck(item)}
+        style={{ height: 100 }}
       >
-        {item.completed && (
-          <IconSymbol name="checkmark" color="white" style={{ fontSize: 25 }} />
-        )}
+        <View
+          className={`size-8 rounded-full border-2 flex items-center justify-center ${
+            item.completed
+              ? "bg-green-500 border-green-500"
+              : "bg-transparent border-gray-400"
+          }`}
+        >
+          {item.completed && (
+            <IconSymbol
+              name="checkmark"
+              color="white"
+              style={{ fontSize: 25 }}
+            />
+          )}
+        </View>
       </TouchableOpacity>
 
-      <ButtonOpacity>
+      <ButtonOpacity
+        onPress={() =>
+          props.navigation.navigate("ModalAddTask", { task: item })
+        }
+
+      >
         <View className="flex flex-col items-start gap-2">
           <Text
             className={`text-white text-lg font-semibold ${
