@@ -127,11 +127,14 @@ export default function ModalAddTask(props: any) {
             title={task && task.id ? "Actualizar" : "Guardar"}
             onPress={task && task.id ? handlerUpdate : handlerSubmit}
           />
-          <ButtonNative
-            title="Eliminar"
-            colorText="danger"
-            onPress={handleDelete}
-          />
+          {task && task.id && (
+            <ButtonNative
+              title="Eliminar"
+              colorText="danger"
+              onPress={handleDelete}
+            />
+          )}
+
           <ButtonNative
             title="Cancelar"
             colorText="transparent"
