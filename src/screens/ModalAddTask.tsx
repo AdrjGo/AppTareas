@@ -1,17 +1,14 @@
+import CalendarPicker from "@/components/CalendarPicker";
 import ButtonNative from "@/components/common/buttons/ButtonNative";
 import InputIcon from "@/components/common/inputs/InputIcon";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { addTask } from "@/services/firebaseTask";
 import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
-import DateTimePicker, {
-  DateType,
-  getDefaultStyles,
-} from "react-native-ui-datepicker";
+import { Alert, ScrollView, Text, View } from "react-native";
+import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 
 export default function ModalAddTask(props: any) {
-  const defaultStyles = getDefaultStyles();
   const [selected, setSelected] = useState<DateType>();
   let today = new Date();
 
@@ -88,39 +85,7 @@ export default function ModalAddTask(props: any) {
           </View>
 
           <View className="w-[90%] bg-zinc-900 mb-3 rounded-xl items-center">
-            <DateTimePicker
-              mode="single"
-              date={selected}
-              minDate={today}
-              onChange={({ date }) => setSelected(date)}
-              locale={"es-ES"}
-              monthCaptionFormat="full"
-              use12Hours={true}
-              styles={{
-                ...defaultStyles,
-                selected: {
-                  backgroundColor: "#52525b",
-                },
-                day_label: {
-                  color: "#FFFFFF",
-                },
-                year_selector_label: {
-                  color: "#ffffff",
-                },
-                month_selector_label: {
-                  color: "#FFFFFF",
-                  textTransform: "uppercase",
-                },
-                button_next: {
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: 10,
-                },
-                button_prev: {
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: 10,
-                },
-              }}
-            />
+            <CalendarPicker selected={selected} setSelected={setSelected} />
           </View>
         </View>
 
