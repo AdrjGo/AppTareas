@@ -99,7 +99,7 @@ export default function ModalAddTask(props: any) {
               styles={{
                 ...defaultStyles,
                 selected: {
-                  backgroundColor: "black",
+                  backgroundColor: "#52525b",
                 },
                 day_label: {
                   color: "#FFFFFF",
