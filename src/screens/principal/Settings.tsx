@@ -1,12 +1,28 @@
-import { Alert, Text, View, ScrollView, TouchableOpacity } from "react-native"
-import { getAuth, signOut } from "firebase/auth"
+import { Alert, Text, View, ScrollView, TouchableOpacity, TextInput } from "react-native"
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth"
 import appFirebase from "@/config/firebaseConfig"
 import { Feather } from "@expo/vector-icons"
+import { useEffect, useState } from "react"
 
 export default function Settings(props: any) {
+  const [userEmail, setUserEmail] = useState<string>("") // Estado para el correo del usuario
+  const [userName, setUserName] = useState<string>("") // Estado para el nombre del usuario
+  const auth = getAuth(appFirebase)
+
+  // Obtener el correo del usuario al cargar la pantalla
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserEmail(user.email || "") // Guardar el correo del usuario
+      }
+    })
+    return unsubscribe // Limpiar la suscripción al desmontar el componente
+  }, [])
+
+  // Función para cerrar sesión
   const handleLogout = async () => {
     try {
-      await signOut(getAuth(appFirebase))
+      await signOut(auth)
       Alert.alert("Sesión cerrada", "Has cerrado la sesión")
       props.navigation.replace("Login")
     } catch (error) {
@@ -16,20 +32,19 @@ export default function Settings(props: any) {
 
   return (
     <View className="flex-1 bg-gray-100">
-      {/* Header */}
-      <View className="bg-[#1E2A47] p-4">
-        <Text className="text-sm font-medium text-white">Nombre del usuario</Text>
-      </View>
-
       {/* Profile Info */}
       <View className="bg-[#1E2A47] p-4 pb-6 items-center">
         <View className="w-16 h-16 bg-[#E25C33] rounded-full items-center justify-center">
-          <Text className="text-lg font-medium text-white">AC</Text>
+          <Text className="text-lg font-medium text-white">
+            {userName ? userName.charAt(0).toUpperCase() : "U"}
+          </Text>
         </View>
         <View className="mt-2 items-center">
-          <Text className="text-gray-400 text-sm">@usuario</Text>
-          <Text className="font-medium text-white">Usuario@gmail.com</Text>
-          <Text className="text-xs text-gray-400 mt-1">Usuario de Name desde agosto de 2024</Text>
+          <Text className="text-gray-400 text-sm">@{userName || "usuario"}</Text>
+          <Text className="font-medium text-white">{userEmail}</Text>
+          <Text className="text-xs text-gray-400 mt-1">
+            Usuario de Name 
+          </Text>
         </View>
       </View>
 
@@ -41,11 +56,7 @@ export default function Settings(props: any) {
           <View className="space-y-3">
             <View className="flex-row items-center gap-3">
               <Feather name="user" size={18} color="#9ca3af" />
-              <Text className="text-sm text-white">Usuario</Text>
-            </View>
-            <View className="flex-row items-center gap-3">
-              <Feather name="briefcase" size={18} color="#9ca3af" />
-              <Text className="text-sm text-white">Espacio de trabajo</Text>
+              <Text className="text-sm text-white">{userName || "Usuario"}</Text>
             </View>
             <View className="flex-row items-center gap-3">
               <Feather name="briefcase" size={18} color="#9ca3af" />
@@ -58,10 +69,19 @@ export default function Settings(props: any) {
         <View className="px-4 py-3 border-t border-gray-800">
           <Text className="text-sm font-medium text-white mb-2">Cuenta</Text>
           <View className="space-y-3">
+            {/* Campo para ingresar el nombre */}
             <View className="flex-row items-center gap-3">
-              <Feather name="user" size={18} color="#9ca3af" />
-              <Text className="text-sm text-white">Perfil y visibilidad</Text>
+              <Feather name="edit" size={18} color="#9ca3af" />
+              <TextInput
+                className="flex-1 text-sm text-white"
+                placeholder="Ingresa tu nombre"
+                placeholderTextColor="#9ca3af"
+                value={userName}
+                onChangeText={setUserName}
+              />
             </View>
+
+            {/* Cerrar sesión */}
             <TouchableOpacity className="flex-row items-center gap-3" onPress={handleLogout}>
               <Feather name="log-out" size={18} color="#9ca3af" />
               <Text className="text-sm text-white">Cerrar sesión</Text>

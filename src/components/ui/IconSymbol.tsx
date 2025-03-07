@@ -13,6 +13,9 @@ const MAPPING = {
   'calendar': 'calendar-today',
   'bell.fill': 'notifications',
   'gear': 'settings',
+  'magnifyingglass': 'search',
+  'clock': 'schedule',
+  'plus': 'add',
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],

@@ -6,9 +6,16 @@ interface Props {
   label: string;
   isPassword?: boolean;
   onChangeTexto?: any;
+  keyboardType?: any;
 }
 
-function Input({ placeholder, label, isPassword, onChangeTexto }: Props) {
+function Input({
+  placeholder,
+  label,
+  isPassword,
+  onChangeTexto,
+  keyboardType,
+}: Props) {
   return (
     <View className="my-3">
       <Text className="text-xl text-white">{label}</Text>
@@ -19,6 +26,7 @@ function Input({ placeholder, label, isPassword, onChangeTexto }: Props) {
         secureTextEntry={isPassword}
         onChangeText={onChangeTexto}
         keyboardAppearance="dark"
+        keyboardType={keyboardType}
       />
     </View>
   );
