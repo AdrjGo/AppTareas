@@ -1,5 +1,5 @@
-import "./global.css";
 import "react-native-gesture-handler";
+import "./global.css";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "@/screens/principal/Todo";
@@ -19,6 +19,7 @@ import TaskList from "@/screens/TaskList";
 import ModalAddTask from "@/screens/ModalAddTask";
 import Modals from "@/components/common/Modals";
 import EditListModal from "./src/screens/EditListModal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,45 +91,47 @@ export default function App() {
   const colorScheme = useColorScheme();
 
   return (
-    <NavigationContainer theme={DarkThemeCustom}>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Group>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Main"
-            component={MyTabs}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="List"
-            component={TaskList}
-            options={({ route }: any) => ({
-              headerShown: true,
-              headerBackTitle: "Atrás",
-              headerTitle: route.params?.listName || "Lista",
-              headerRight: () => (
-                <EditListModal
-                  listId={route.params?.listId}
-                  listName={route.params?.listName}
-                />
-              ),
-            })}
-          />
-        </Stack.Group>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer theme={DarkThemeCustom}>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Group>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Main"
+              component={MyTabs}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="List"
+              component={TaskList}
+              options={({ route }: any) => ({
+                headerShown: true,
+                headerBackTitle: "Atrás",
+                headerTitle: route.params?.listName || "Lista",
+                headerRight: () => (
+                  <EditListModal
+                    listId={route.params?.listId}
+                    listName={route.params?.listName}
+                  />
+                ),
+              })}
+            />
+          </Stack.Group>
 
-        <Stack.Group screenOptions={{ presentation: "modal" }}>
-          <Stack.Screen
-            name="ModalAddTask"
-            component={ModalAddTask}
-            options={{ title: "Añadir Tarea", headerBackTitle: "Atrás" }}
-          />
-        </Stack.Group>
-      </Stack.Navigator>
-      <StatusBar style={colorScheme === "dark" ? "dark" : "light"} />
-    </NavigationContainer>
+          <Stack.Group screenOptions={{ presentation: "modal" }}>
+            <Stack.Screen
+              name="ModalAddTask"
+              component={ModalAddTask}
+              options={{ title: "Añadir Tarea", headerBackTitle: "Atrás" }}
+            />
+          </Stack.Group>
+        </Stack.Navigator>
+        <StatusBar style={colorScheme === "dark" ? "dark" : "light"} />
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }

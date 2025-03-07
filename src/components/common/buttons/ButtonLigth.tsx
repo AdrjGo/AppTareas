@@ -140,7 +140,7 @@ function ButtonLigth({
     >
       <Text
         className={twMerge(
-          "text-xl font-semibold font",
+          "",
           getColorText(),
           getTextAlign(),
           getTextSize(),

@@ -1,7 +1,15 @@
-import { ref, set, push, get, update } from "firebase/database";
+import { ref, set, push, get, query, orderByChild } from "firebase/database";
 import { auth, db } from "@/config/firebaseConfig";
 
-export const addList = async () => {
+interface ListData {
+  name: string;
+  description?: string;
+  dueDate?: string;
+  priority?: 'alta' | 'media' | 'baja';
+  status?: 'pendiente' | 'completada';
+}
+
+export const addList = async (listData: ListData) => {
   const user = auth.currentUser;
   if (!user) return;
 
@@ -12,11 +20,49 @@ export const addList = async () => {
   const listCount = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
 
   await set(newListRef, {
-    name: "Nueva Lista",
+    name: listData.name || "Nueva Lista",
+    description: listData.description || "",
+    dueDate: listData.dueDate || new Date().toISOString(),
+    priority: listData.priority || "media",
+    status: listData.status || "pendiente",
     tasks: [],
     order: listCount + 1,
     dateCreated: new Date().toISOString(),
   });
+
+  return newListRef.key;
+};
+
+export const getListsByDate = async (date: string) => {
+  const user = auth.currentUser;
+  if (!user) return [];
+
+  const listRef = ref(db, `users/${user.uid}/lists`);
+  const snapshot = await get(listRef);
+
+  if (!snapshot.exists()) return [];
+
+  const lists = [];
+  const data = snapshot.val();
+
+  for (const key in data) {
+    if (data[key].dueDate?.split('T')[0] === date.split('T')[0]) {
+      lists.push({
+        id: key,
+        ...data[key]
+      });
+    }
+  }
+
+  return lists;
+};
+
+export const updateList = async (listId: string, updates: Partial<ListData>) => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const listRef = ref(db, `users/${user.uid}/lists/${listId}`);
+  await set(listRef, updates);
 };
 
 export const editList = async (listId: string, newListName: string) => {

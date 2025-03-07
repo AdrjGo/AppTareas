@@ -10,6 +10,8 @@ interface Props {
   stylesView?: "search" | "formTask" | "formTaskTextArea";
   stylesInput?: "search" | "formTaskText" | "formTaskTextArea";
   multiLine?: boolean;
+  value?: string;
+  onChangeTexto?: any;
 }
 
 function InputIcon({
@@ -18,7 +20,9 @@ function InputIcon({
   className,
   stylesInput,
   stylesView,
-  multiLine
+  multiLine,
+  value,
+  onChangeTexto,
 }: Props) {
   const getStyleViewDefined = () => {
     switch (stylesView) {
@@ -52,6 +56,8 @@ function InputIcon({
         placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
         multiline={multiLine}
         keyboardAppearance="dark"
+        value={value}
+        onChangeText={onChangeTexto}
       ></TextInput>
     </View>
   );

@@ -14,9 +14,7 @@ module.exports = {
       colors: {
         "dark-blue": "#103347",
         "light-green": "#3ac867",
-<<<<<<< HEAD
         "gray-common": "#1c1c1e",
-=======
         border: "hsl(var(--border, 0 0% 90%))",
         input: "hsl(var(--input, 0 0% 95%))",
         ring: "hsl(var(--ring, 210 100% 40%))",
@@ -55,7 +53,6 @@ module.exports = {
         lg: "var(--radius, 12px)",
         md: "calc(var(--radius, 12px) - 2px)",
         sm: "calc(var(--radius, 12px) - 4px)",
->>>>>>> DT05-Settings-Screen
       },
     },
   },

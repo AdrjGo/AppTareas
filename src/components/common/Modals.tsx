@@ -37,7 +37,13 @@ function Modals({ icon, animationType, children, buttonChildren }: Props) {
             <View className="flex-1 items-center justify-center">
               <View className="bg-gray-common rounded-lg p-4 ">
                 {children}
-                <ButtonOpacity colorBg="red" colorText="blanco" rounded="medium"  onPress={() => setModalVisible(!modalVisible)}>
+                <ButtonOpacity
+                  colorBg="red"
+                  colorText="blanco"
+                  rounded="medium"
+                  textFont="medium"
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
                   Cerrar
                 </ButtonOpacity>
               </View>

@@ -4,7 +4,7 @@ import { Colors } from "@/constants/Colors";
 import { twMerge } from "@/utils/twMerge";
 
 interface Props {
-  text?: string;
+
   colorBg?:
     | "black"
     | "darkBlue"
@@ -21,11 +21,12 @@ interface Props {
   textSize?: "big" | "medium" | "small";
   textFont?: "light" | "medium" | "bold";
   className?: any;
+  classNameText?: any;
   rounded?: "big" | "medium" | "small";
 }
 
 function ButtonOpacity({
-  text,
+
   colorBg,
   onPress,
   colorText,
@@ -34,6 +35,7 @@ function ButtonOpacity({
   textSize,
   textFont,
   className,
+  classNameText,
   rounded,
 }: Props) {
   const getColorText = () => {
@@ -126,7 +128,7 @@ function ButtonOpacity({
       case "small":
         return "rounded-sm";
       default:
-        return "";
+        return "font-normal";
     }
   };
   return (
@@ -137,14 +139,13 @@ function ButtonOpacity({
       >
         <Text
           className={twMerge(
-            "text-center text-xl font-semibold",
+            `text-center ${classNameText}`,
             getColorText(),
             getTextAlign(),
             getTextSize(),
             getTextFont()
           )}
         >
-          {text}
           {children}
         </Text>
       </TouchableOpacity>

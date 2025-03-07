@@ -43,7 +43,7 @@ export default function Todo(props: any) {
           Tus listas
         </Text>
       </View>
-      <View className="">
+      <View >
         <FlatList
           data={listas}
           keyExtractor={(item) => item.id}
