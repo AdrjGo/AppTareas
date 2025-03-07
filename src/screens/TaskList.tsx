@@ -1,4 +1,4 @@
-import { View, FlatList, TouchableOpacity } from "react-native";
+import { View, FlatList } from "react-native";
 import ButtonOpacity from "@/components/common/buttons/ButtonOpacity";
 import { useEffect, useState } from "react";
 import { getAllTasks, updateCompletedTask } from "@/services/firebaseTask";
@@ -7,8 +7,9 @@ import CardTask from "@/components/CardTask";
 type getTask = {
   id: string;
   title: string;
+  description: string;
   dateCreated: string;
-  dateEndTask: string;
+  dateEndTask: string | null;
   completed: boolean;
   priority: string;
 };
@@ -58,7 +59,7 @@ export default function TaskList(props: any) {
           data={tasks}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <CardTask handleCheck={handleCheck} item={item} navigation={props.navigation} />
+            <CardTask handleCheck={handleCheck} item={item} listId={props.route.params.listId} navigation={props.navigation} />
           )}
         />
       </View>

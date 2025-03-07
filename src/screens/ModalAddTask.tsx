@@ -2,14 +2,14 @@ import CalendarPicker from "@/components/CalendarPicker";
 import ButtonNative from "@/components/common/buttons/ButtonNative";
 import InputIcon from "@/components/common/inputs/InputIcon";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { addTask } from "@/services/firebaseTask";
+import { addTask, deleteTask, updateTask } from "@/services/firebaseTask";
 import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
 import { DateType } from "react-native-ui-datepicker";
 
 export default function ModalAddTask(props: any) {
-  const { task } = props.route.params;
+  const { task, listId } = props.route.params;
 
   const [title, setTitle] = useState(task ? task.title : "");
   const [description, setDescription] = useState(task ? task.description : "");
@@ -17,10 +17,8 @@ export default function ModalAddTask(props: any) {
     task ? task.priority : "media"
   );
   const [selected, setSelected] = useState<DateType | undefined>(
-    task ? new Date(task.dateEndTask) : undefined
+    task?.dateEndTask ? new Date(task.dateEndTask) : undefined
   );
-
-  
 
   const handlerSubmit = async () => {
     if (!props.route.params?.listId) {
@@ -39,6 +37,36 @@ export default function ModalAddTask(props: any) {
     } catch (error) {
       console.error("Error al guardar la tarea:", error);
       Alert.alert("Error", "No se pudo guardar la tarea");
+    }
+  };
+
+  const handlerUpdate = async () => {
+    console.log("Route Params:", props.route.params);
+    if (!props.route.params?.listId) {
+      Alert.alert("Error", "No se encontró la lista");
+      return;
+    }
+    try {
+      await updateTask(listId, task.id, {
+        title,
+        description,
+        selectedPriority: selectedPriority ?? "media",
+        dateEnd: selected ? selected.toString() : undefined,
+      });
+      props.navigation.goBack();
+    } catch (error) {
+      console.error("Error al guardar la tarea:", error);
+      Alert.alert("Error", "No se pudo guardar la tarea");
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteTask(props.route.params.listId, task.id);
+      props.navigation.goBack();
+    } catch (error) {
+      console.error("Error al eliminar la tarea:", error);
+      Alert.alert("Error", "No se pudo eliminar la tarea");
     }
   };
 
@@ -95,10 +123,18 @@ export default function ModalAddTask(props: any) {
         </View>
 
         <View className="gap-5 justify-center my-5">
-          <ButtonNative title="Guardar" onPress={handlerSubmit} />
+          <ButtonNative
+            title={task && task.id ? "Actualizar" : "Guardar"}
+            onPress={task && task.id ? handlerUpdate : handlerSubmit}
+          />
+          <ButtonNative
+            title="Eliminar"
+            colorText="danger"
+            onPress={handleDelete}
+          />
           <ButtonNative
             title="Cancelar"
-            colorText="danger"
+            colorText="transparent"
             onPress={() => props.navigation.goBack()}
           />
         </View>

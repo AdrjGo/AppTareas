@@ -6,28 +6,16 @@ interface PropTask {
   title: string;
   description: string;
   selectedPriority: string;
-  dateEnd?: string;
+  dateEnd?: string | null;
 }
 
 export const addTask = async (
   listId: string,
   { title, description, selectedPriority, dateEnd }: PropTask
 ) => {
-  if (!auth.currentUser) {
-    Alert.alert("Error", "Usuario no autenticado");
-    return;
-  }
-  const userId = auth.currentUser.uid;
+  const userId = auth.currentUser?.uid;
 
-  if (!listId) {
-    Alert.alert("Error", "No se encontró la lista");
-    return;
-  }
-
-  if (!title.trim()) {
-    Alert.alert("Error", "El título de la tarea no puede estar vacío");
-    return;
-  }
+  exceptions(listId, title);
 
   const taskRef = push(ref(db, `users/${userId}/lists/${listId}/tasks`));
 
@@ -45,6 +33,25 @@ export const addTask = async (
   });
 };
 
+
+export const updateTask = async (
+  listId: string, taskId: string,
+  { title, description, selectedPriority, dateEnd }: PropTask
+) => {
+  const userId = auth.currentUser?.uid;
+
+  exceptions(listId, title, taskId);
+
+  const taskRef = ref(db, `users/${userId}/lists/${listId}/tasks/${taskId}`);
+
+  await update(taskRef, {
+    title: title,
+    description: description ?? "",
+    priority: selectedPriority,
+    dateEndTask: dateEnd ? dateEnd.toString() : null,
+  });
+};
+
 export const getAllTasks = async (listId: string, setTask: any) => {
   const user = auth.currentUser;
   if (!user) return;
@@ -56,6 +63,7 @@ export const getAllTasks = async (listId: string, setTask: any) => {
       const taskArray = Object.keys(data).map((key) => ({
         id: key,
         title: data[key].title,
+        description: data[key].description,
         dateCreated: data[key].dateCreated,
         dateEndTask: data[key].dateEndTask,
         completed: data[key].completed,
@@ -67,6 +75,7 @@ export const getAllTasks = async (listId: string, setTask: any) => {
     }
   });
 };
+
 
 export const getTaskById = async (listId: string, taskId: string) => {
   const user = auth.currentUser;
@@ -91,8 +100,7 @@ export const getTaskById = async (listId: string, taskId: string) => {
     throw new Error("Tarea no encontrada");
   }
 };
-// getTaskById("-OKiStqH-4BQO90punCe", "-OKiSyZWvlTncwhUqO5O"
-// );
+
 
 export const updateCompletedTask = async (
   listId: string,
@@ -114,6 +122,7 @@ export const updateCompletedTask = async (
   }
 };
 
+
 export const deleteTask = async (listId: string, taskId: string) => {
   const user = auth.currentUser;
   if (!user) return;
@@ -121,4 +130,28 @@ export const deleteTask = async (listId: string, taskId: string) => {
   const taskRef = ref(db, `users/${user.uid}/lists/${listId}/tasks/${taskId}`);
 
   await set(taskRef, null);
+};
+
+
+
+
+const exceptions = (listId: string, taskId?: string, title?: string) => {
+  if (!auth.currentUser) {
+    Alert.alert("Error", "Usuario no autenticado");
+    return;
+  }
+  if (!taskId) {
+    Alert.alert("Error", "No se encontró la Tarea");
+    return;
+  }
+
+  if (!listId) {
+    Alert.alert("Error", "No se encontró la lista");
+    return;
+  }
+
+  if (title === "") {
+    Alert.alert("Error", "El título de la tarea no puede estar vacío");
+    return;
+  }
 };

@@ -4,7 +4,7 @@ import { Button } from "react-native";
 interface Props {
   title: string;
   onPress?: any;
-  colorText?: "danger" | "success" | "warning" | "save";
+  colorText?: "danger" | "success" | "warning" | "transparent";
 }
 
 function ButtonNative({ title, onPress, colorText }: Props) {
@@ -16,6 +16,8 @@ function ButtonNative({ title, onPress, colorText }: Props) {
         return "#3ac867";
       case "warning":
         return "#f5a623";
+      case "transparent":
+        return "rgba(0, 0, 0, 0.3)";
       default:
         return "";
     }
