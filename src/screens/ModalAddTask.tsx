@@ -1,11 +1,10 @@
 import ButtonNative from "@/components/common/buttons/ButtonNative";
 import InputIcon from "@/components/common/inputs/InputIcon";
 import { IconSymbol } from "@/components/ui/IconSymbol";
+import { addTask } from "@/services/firebaseTask";
 import { Picker } from "@react-native-picker/picker";
-import Checkbox from "expo-checkbox";
-import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Alert, ScrollView, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import DateTimePicker, {
   DateType,
   getDefaultStyles,
@@ -16,7 +15,30 @@ export default function ModalAddTask(props: any) {
   const [selected, setSelected] = useState<DateType>();
   let today = new Date();
 
-  const [selectedPriority, setSelectedPriority] = useState();
+  const [selectedPriority, setSelectedPriority] = useState<string>("media");
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  const handlerSubmit = async () => {
+    if (!props.route.params?.listId) {
+      Alert.alert("Error", "No se encontró la lista");
+      return;
+    }
+    try {
+      await addTask(props.route.params.listId, {
+        title,
+        description,
+        selectedPriority: selectedPriority ?? "media",
+        dateEnd: selected ? selected.toString() : undefined,
+      });
+
+      props.navigation.goBack();
+    } catch (error) {
+      console.error("Error al guardar la tarea:", error);
+      Alert.alert("Error", "No se pudo guardar la tarea");
+    }
+  };
 
   return (
     <ScrollView>
@@ -26,6 +48,8 @@ export default function ModalAddTask(props: any) {
           icon="book"
           stylesView="formTask"
           stylesInput="formTaskText"
+          value={title}
+          onChangeTexto={setTitle}
         />
 
         <InputIcon
@@ -35,16 +59,19 @@ export default function ModalAddTask(props: any) {
           stylesInput="formTaskTextArea"
           multiLine={true}
           className={"z-50"}
+          value={description}
+          onChangeTexto={setDescription}
         />
 
         <View
-          className="bg-zinc-800 justify-start flex-row items-center z-0"
+          className="bg-zinc-800 justify-start flex-row items-center z-0 px-3"
           style={{ height: 80 }}
         >
+          <IconSymbol name="tag.fill" color="white" />
           <Picker
             selectedValue={selectedPriority}
             onValueChange={(itemValue) => setSelectedPriority(itemValue)}
-            style={{ width: "100%", color: "white" }}
+            style={{ width: "90%", color: "white" }}
             dropdownIconColor="white"
             itemStyle={{ color: "white" }}
           >
@@ -54,34 +81,51 @@ export default function ModalAddTask(props: any) {
           </Picker>
         </View>
 
-        <View className="bg-zinc-800 justify-start">
-          <View className="flex-row items-center px-3">
+        <View className="bg-zinc-800 items-center">
+          <View className="flex-row items-center p-3">
             <IconSymbol name="calendar" color="white" />
             <Text className="text-zinc-400 p-3 text-">Fecha final...</Text>
           </View>
-          <DateTimePicker
-            mode="single"
-            date={selected}
-            minDate={today}
-            onChange={({ date }) => setSelected(date)}
-            locale={"es-ES"}
-            monthCaptionFormat="full"
-            use12Hours={true}
-            styles={{
-              ...defaultStyles,
-              button_next: {
-                ...defaultStyles.button_next,
-                color: "white",
-              },
-            }}
-          />
+
+          <View className="w-[90%] bg-zinc-900 mb-3 rounded-xl items-center">
+            <DateTimePicker
+              mode="single"
+              date={selected}
+              minDate={today}
+              onChange={({ date }) => setSelected(date)}
+              locale={"es-ES"}
+              monthCaptionFormat="full"
+              use12Hours={true}
+              styles={{
+                ...defaultStyles,
+                selected: {
+                  backgroundColor: "black",
+                },
+                day_label: {
+                  color: "#FFFFFF",
+                },
+                year_selector_label: {
+                  color: "#ffffff",
+                },
+                month_selector_label: {
+                  color: "#FFFFFF",
+                  textTransform: "uppercase",
+                },
+                button_next: {
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 10,
+                },
+                button_prev: {
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 10,
+                },
+              }}
+            />
+          </View>
         </View>
 
         <View className="gap-5 justify-center my-5">
-          <ButtonNative
-            title="Guardar"
-            onPress={() => Alert.alert("Guardado")}
-          />
+          <ButtonNative title="Guardar" onPress={handlerSubmit} />
           <ButtonNative
             title="Cancelar"
             colorText="danger"

@@ -18,7 +18,9 @@ const MAPPING = {
   'plus': 'add',
   'ellipsis': 'more-horiz',
   'book': 'book',
-  'text.alignleft': 'text-snippet',
+  'text.alignleft': 'article',
+  'tag.fill': 'label',
+  'checkmark': 'check',
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],

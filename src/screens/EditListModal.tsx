@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Alert, View, Text } from "react-native";
-import { db, auth } from "@/config/firebaseConfig";
-import { ref, update } from "firebase/database";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useState } from "react";
+import { Alert, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { editList } from "@/services/firebaseList";
 import Input from "@/components/common/inputs/Input";
 import ButtonOpacity from "@/components/common/buttons/ButtonOpacity";
@@ -19,14 +17,12 @@ function EditListScreen({ listId, listName }: Props) {
   const [newListName, setNewListName] = useState(listName);
 
   const handleSaveChanges = async () => {
-    if (newListName.trim() === "") {
+    if (!newListName) {
       Alert.alert("El nombre no puede estar vacío.");
       return;
     }
-
     await editList(listId, newListName);
     navigation.goBack();
-    // Alert.alert("Éxito", "Nombre de lista actualizado correctamente");
   };
 
   return (
@@ -41,9 +37,10 @@ function EditListScreen({ listId, listName }: Props) {
             onChangeTexto={setNewListName}
           />
           <ButtonOpacity
-            text="Guardar cambios"
+            children="Guardar cambios"
             colorBg="blue"
             colorText="blanco"
+            textFont="medium"
             rounded="medium"
             className={"mb-5"}
             onPress={handleSaveChanges}
