@@ -7,9 +7,6 @@ import { formatDate } from "@/utils/formatDate";
 function CardTask(props: any) {
   const { item, handleCheck, listId } = props;
 
-  const dateEndDisplay = item?.dateEndTask
-    ? formatDate(item.dateEndTask)
-    : "Sin fecha final";
   return (
     <View className="w-full px-3 my-2 bg-zinc-800 rounded-lg flex-row items-center gap-3">
       <TouchableOpacity

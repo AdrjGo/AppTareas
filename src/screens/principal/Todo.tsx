@@ -1,3 +1,4 @@
+import React from "react";
 import ButtonLigth from "@/components/common/buttons/ButtonLigth";
 import ButtonNative from "@/components/common/buttons/ButtonNative";
 import InputIcon from "@/components/common/inputs/InputIcon";
@@ -34,7 +35,12 @@ export default function Todo(props: any) {
   return (
     <>
       <View className="m-5 justify-center items-center ">
-        <InputIcon placeholder="Listas de tareas" icon="magnifyingglass" stylesView="search" stylesInput="search" />
+        <InputIcon
+          placeholder="Listas de tareas"
+          icon="magnifyingglass"
+          stylesView="search"
+          stylesInput="search"
+        />
       </View>
 
       <View className="flex-row items-center mx-5 my-3 gap-3">
@@ -43,7 +49,7 @@ export default function Todo(props: any) {
           Tus listas
         </Text>
       </View>
-      <View >
+      <View>
         <FlatList
           data={listas}
           keyExtractor={(item) => item.id}
@@ -52,7 +58,7 @@ export default function Todo(props: any) {
               colorText="blanco"
               colorBg="zinc"
               colorBgPress="gray"
-              className={"border-b-2 border-zinc-500 rounded-none"}
+              className={"m-3 bg-zinc-800 rounded-lg flex-row items-center "}
               onPress={() =>
                 props.navigation.navigate("List", {
                   listName: item.name,

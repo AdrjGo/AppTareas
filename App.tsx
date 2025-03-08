@@ -1,5 +1,5 @@
-import "./global.css";
 import "react-native-gesture-handler";
+import "./global.css";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "@/screens/principal/Todo";
@@ -19,6 +19,7 @@ import TaskList from "@/screens/TaskList";
 import ModalAddTask from "@/screens/ModalAddTask";
 import Modals from "@/components/common/Modals";
 import EditListModal from "./src/screens/EditListModal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CardTask from "@/components/CardTask";
 
 const Stack = createStackNavigator();

@@ -4,17 +4,17 @@ import DateTimePicker, { getDefaultStyles } from "react-native-ui-datepicker";
 interface Props {
   selected: any;
   setSelected: any;
+  minDate?: any;
 }
 
-function CalendarPicker({ selected, setSelected }: Props) {
+function CalendarPicker({ selected, setSelected, minDate }: Props) {
   const defaultStyles = getDefaultStyles();
-  let today = new Date();
   return (
     <>
       <DateTimePicker
         mode="single"
         date={selected}
-        minDate={today}
+        minDate={minDate}
         onChange={({ date }) => setSelected(date)}
         locale={"es-ES"}
         monthCaptionFormat="full"

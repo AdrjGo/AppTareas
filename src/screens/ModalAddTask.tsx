@@ -10,6 +10,7 @@ import { DateType } from "react-native-ui-datepicker";
 
 export default function ModalAddTask(props: any) {
   const { task, listId } = props.route.params;
+    let today = new Date();
 
   const [title, setTitle] = useState(task ? task.title : "");
   const [description, setDescription] = useState(task ? task.description : "");
@@ -111,14 +112,14 @@ export default function ModalAddTask(props: any) {
           </Picker>
         </View>
 
-        <View className="bg-zinc-800 items-center">
+        <View className="bg-zinc-900 items-center">
           <View className="flex-row items-center p-3">
             <IconSymbol name="calendar" color="white" />
             <Text className="text-zinc-400 p-3 text-">Fecha final...</Text>
           </View>
 
           <View className="w-[90%] bg-zinc-900 mb-3 rounded-xl items-center">
-            <CalendarPicker selected={selected} setSelected={setSelected} />
+            <CalendarPicker selected={selected} setSelected={setSelected} minDate={today} />
           </View>
         </View>
 
