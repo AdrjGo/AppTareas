@@ -1,4 +1,4 @@
-import { ref, set, push, get, query, orderByChild } from "firebase/database";
+import { ref, set, push, get, query, orderByChild, update } from "firebase/database";
 import { auth, db } from "@/config/firebaseConfig";
 
 interface ListData {
@@ -9,7 +9,7 @@ interface ListData {
   status?: 'pendiente' | 'completada';
 }
 
-export const addList = async (listData: ListData) => {
+export const addList = async () => {
   const user = auth.currentUser;
   if (!user) return;
 
@@ -20,11 +20,7 @@ export const addList = async (listData: ListData) => {
   const listCount = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
 
   await set(newListRef, {
-    name: listData.name || "Nueva Lista",
-    description: listData.description || "",
-    dueDate: listData.dueDate || new Date().toISOString(),
-    priority: listData.priority || "media",
-    status: listData.status || "pendiente",
+    name: "Nueva Lista",
     tasks: [],
     order: listCount + 1,
     dateCreated: new Date().toISOString(),
