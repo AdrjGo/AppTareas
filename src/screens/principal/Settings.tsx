@@ -1,34 +1,42 @@
-import { Alert, Text, View, ScrollView, TouchableOpacity, TextInput } from "react-native"
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth"
-import appFirebase from "@/config/firebaseConfig"
-import { Feather } from "@expo/vector-icons"
-import { useEffect, useState } from "react"
+import { Alert, Text, View, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import appFirebase from "@/config/firebaseConfig";
+import { Feather } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 
 export default function Settings(props: any) {
-  const [userEmail, setUserEmail] = useState<string>("") // Estado para el correo del usuario
-  const [userName, setUserName] = useState<string>("") // Estado para el nombre del usuario
-  const auth = getAuth(appFirebase)
+  const [userEmail, setUserEmail] = useState<string>(""); 
+  const [userName, setUserName] = useState<string>(""); 
+  const auth = getAuth(appFirebase);
 
-  // Obtener el correo del usuario al cargar la pantalla
+ 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUserEmail(user.email || "") // Guardar el correo del usuario
-      }
-    })
-    return unsubscribe // Limpiar la suscripción al desmontar el componente
-  }, [])
+        setUserEmail(user.email || "");
 
-  // Función para cerrar sesión
+        
+        if (!user.displayName) {
+          const emailPrefix = user.email ? user.email.split("@")[0] : "usuario"; 
+          setUserName(emailPrefix); 
+        } else {
+          setUserName(user.displayName); 
+        }
+      }
+    });
+    return unsubscribe; 
+  }, []);
+
+  
   const handleLogout = async () => {
     try {
-      await signOut(auth)
-      Alert.alert("Sesión cerrada", "Has cerrado la sesión")
-      props.navigation.replace("Login")
+      await signOut(auth);
+      Alert.alert("Sesión cerrada", "Has cerrado la sesión");
+      props.navigation.replace("Login");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <View className="flex-1 bg-gray-100">
@@ -42,12 +50,9 @@ export default function Settings(props: any) {
         <View className="mt-2 items-center">
           <Text className="text-gray-400 text-sm">@{userName || "usuario"}</Text>
           <Text className="font-medium text-white">{userEmail}</Text>
-          <Text className="text-xs text-gray-400 mt-1">
-            Usuario de Name 
-          </Text>
+          <Text className="text-xs text-gray-400 mt-1"></Text>
         </View>
       </View>
-
       {/* Main Content */}
       <ScrollView className="flex-1 bg-[#121212]">
         {/* Workspaces Section */}
@@ -73,7 +78,7 @@ export default function Settings(props: any) {
             <View className="flex-row items-center gap-3">
               <Feather name="edit" size={18} color="#9ca3af" />
               <TextInput
-                className="flex-1 text-sm text-white"
+                className="flex-1 text-sm text-white p-2"
                 placeholder="Ingresa tu nombre"
                 placeholderTextColor="#9ca3af"
                 value={userName}
@@ -82,20 +87,23 @@ export default function Settings(props: any) {
             </View>
 
             {/* Cerrar sesión */}
-            <TouchableOpacity className="flex-row items-center gap-3" onPress={handleLogout}>
+            <TouchableOpacity
+              className="flex-row items-center gap-3 p-3"
+              onPress={handleLogout}
+            >
               <Feather name="log-out" size={18} color="#9ca3af" />
               <Text className="text-sm text-white">Cerrar sesión</Text>
             </TouchableOpacity>
-            <View className="flex-row items-center gap-3">
+            <TouchableOpacity className="flex-row items-center gap-3 p-3">
               <Feather name="bell" size={18} color="#9ca3af" />
               <Text className="text-sm text-white">Conviértete en evaluador de versiones beta</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
 
         {/* Browser Management Section */}
         <View className="px-4 py-3 border-t border-gray-800">
-          <View className="flex-row items-center gap-3">
+          <TouchableOpacity className="flex-row items-center gap-3 p-3">
             <Feather name="globe" size={18} color="#9ca3af" />
             <View>
               <Text className="text-sm text-white">Gestionar cuentas en navegador</Text>
@@ -103,10 +111,9 @@ export default function Settings(props: any) {
                 Revisar las cuentas que tengan la sesión iniciada y quitarlas del navegador
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
-  )
+  );
 }
-
