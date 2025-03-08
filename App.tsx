@@ -19,6 +19,15 @@ import TaskList from "@/screens/TaskList";
 import ModalAddTask from "@/screens/ModalAddTask";
 // import ModalScreen from "@/screens/AddList";
 
+// Importa GoogleSignin para la autenticación con Google
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+// Configura GoogleSignin con el Web Client ID
+GoogleSignin.configure({
+  webClientId: '855081300107-77r0rqbj2g71pv4bmvmhdtltaofvd4ai.apps.googleusercontent.com', // Tu Web Client ID
+  offlineAccess: true, // Opcional: permite solicitar un token de actualización
+});
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 

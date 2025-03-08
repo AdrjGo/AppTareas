@@ -1,48 +1,97 @@
-"use client"
+"use client";
 
-import ButtonOpacity from "@/components/common/buttons/ButtonOpacity"
-import Input from "@/components/common/inputs/Input"
-import { useState } from "react"
-import { Alert, Text, View, Image, TouchableOpacity, ScrollView } from "react-native"
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth"
-import { appFirebase } from "@/config/firebaseConfig"
-import ButtonLigth from "@/components/common/buttons/ButtonLigth"
+import ButtonOpacity from "@/components/common/buttons/ButtonOpacity";
+import Input from "@/components/common/inputs/Input";
+import { useState, useEffect } from "react";
+import { Alert, Text, View, ScrollView, ActivityIndicator } from "react-native";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { appFirebase } from "@/config/firebaseConfig";
+import ButtonLigth from "@/components/common/buttons/ButtonLigth";
+import LoginWithGoogle from "./LoginGoogle";
 
-const auth = getAuth(appFirebase)
+const auth = getAuth(appFirebase);
 
 export default function Login(props: any) {
-  const [email, setEmail] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("Usuario ya autenticado:", user.email);
+        props.navigation.replace("Main");
+      }
+      setInitializing(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleLogin = async () => {
-    try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password)
-      props.navigation.replace("Main")
-    } catch (error) {
-      console.log(error)
-      Alert.alert("¡Ups!", "Algo no está bien. Revisa tu correo y contraseña e inténtalo de nuevo.")
+    if (!email || !password) {
+      Alert.alert("Error", "Por favor ingresa tu correo y contraseña");
+      return;
     }
-  }
+
+    try {
+      setIsLoading(true);
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      console.log("Inicio de sesión exitoso:", user.email);
+      props.navigation.replace("Main");
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert(
+        "¡Ups!",
+        "Algo no está bien. Revisa tu correo y contraseña e inténtalo de nuevo."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleRegister = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Por favor ingresa tu correo y contraseña");
+      return;
+    }
+
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password)
-      Alert.alert("Usuario registrado", `Bienvenido ${user.email}`)
-      props.navigation.navigate("Main")
-    } catch (error) {
-      console.log(error)
+      setIsLoading(true);
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      Alert.alert("Usuario registrado", `Bienvenido ${user.email}`);
+      props.navigation.navigate("Main");
+    } catch (error: any) {
+      console.log(error);
       Alert.alert(
         "Correo ya registrado",
-        "Parece que ya estuviste aquí antes. Ese correo ya está registrado, prueba iniciar sesión.",
-      )
+        "Parece que ya estuviste aquí antes. Ese correo ya está registrado, prueba iniciar sesión."
+      );
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  if (initializing) {
+    return (
+      <View className="flex-1 bg-[#1E2A47] justify-center items-center">
+        <ActivityIndicator size="large" color="#3ac867" />
+        <Text className="text-white mt-4">Cargando...</Text>
+      </View>
+    );
   }
 
   return (
     <ScrollView
       className="flex-1 bg-[#1E2A47]"
       showsVerticalScrollIndicator={true}
-      contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }} // Asegura que el contenido esté centrado
+      contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
     >
       <View className="px-5 py-10 items-center">
         {/* Logo y nombre de la app */}
@@ -53,7 +102,9 @@ export default function Login(props: any) {
           <View className="w-full h-16 bg-purple-600 absolute bottom-0" />
         </View>
 
-        <Text className="text-4xl text-center font-extrabold text-white mb-6">Iniciar Sesión</Text>
+        <Text className="text-4xl text-center font-extrabold text-white mb-6">
+          Iniciar Sesión
+        </Text>
 
         {/* Campos de entrada */}
         <View className="w-full mb-6">
@@ -72,28 +123,27 @@ export default function Login(props: any) {
 
         {/* Botones de inicio de sesión y registro */}
         <View className="w-full mb-4">
-          <ButtonOpacity text="Iniciar Sesión" colorBg="green" onPress={handleLogin} colorText="blanco" />
+          <ButtonOpacity
+            text="Iniciar Sesión"
+            colorBg="green"
+            colorText="blanco"
+            onPress={handleLogin}
+           
+          />
+
           <ButtonLigth
             text="Registrarse"
             colorText="green"
             textAlign="center"
             textSize="medium"
             onPress={handleRegister}
+         
           />
         </View>
 
-        {/* Botón de Google */}
-        <TouchableOpacity
-          className="bg-blue-500 rounded-lg py-3 px-4 flex-row items-center justify-center space-x-2 w-full"
-          onPress={() => Alert.alert("Google", "Botón de Google presionado")}
-        >
-          <Image 
-            source={{ uri: "https://www.google.com/favicon.ico" }} 
-            style={{ width: 20, height: 20 }} 
-          />
-          <Text className="text-white font-medium">Continuar con Google</Text>
-        </TouchableOpacity>
+        {/* Componente de inicio de sesión con Google */}
+        <LoginWithGoogle navigation={props.navigation} />
       </View>
     </ScrollView>
-  )
+  );
 }
