@@ -9,13 +9,11 @@ export default function Settings(props: any) {
   const [userName, setUserName] = useState<string>(""); 
   const auth = getAuth(appFirebase);
 
- 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserEmail(user.email || "");
 
-        
         if (!user.displayName) {
           const emailPrefix = user.email ? user.email.split("@")[0] : "usuario"; 
           setUserName(emailPrefix); 
@@ -27,7 +25,6 @@ export default function Settings(props: any) {
     return unsubscribe; 
   }, []);
 
-  
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -41,44 +38,45 @@ export default function Settings(props: any) {
   return (
     <View className="flex-1 bg-gray-100">
       {/* Profile Info */}
-      <View className="bg-[#1E2A47] p-4 pb-6 items-center">
-        <View className="w-16 h-16 bg-[#E25C33] rounded-full items-center justify-center">
-          <Text className="text-lg font-medium text-white">
+      <View className="bg-[#1E2A47] p-6 pb-8 items-center">
+        <View className="w-24 h-24 bg-[#E25C33] rounded-full items-center justify-center">
+          <Text className="text-2xl font-medium text-white">
             {userName ? userName.charAt(0).toUpperCase() : "U"}
           </Text>
         </View>
-        <View className="mt-2 items-center">
-          <Text className="text-gray-400 text-sm">@{userName || "usuario"}</Text>
-          <Text className="font-medium text-white">{userEmail}</Text>
-          <Text className="text-xs text-gray-400 mt-1"></Text>
+        <View className="mt-4 items-center">
+          <Text className="text-gray-400 text-lg">@{userName || "usuario"}</Text>
+          <Text className="font-medium text-white text-xl">{userEmail}</Text>
+          <Text className="text-xs text-gray-400 mt-2"></Text>
         </View>
       </View>
+
       {/* Main Content */}
       <ScrollView className="flex-1 bg-[#121212]">
         {/* Workspaces Section */}
-        <View className="px-4 py-3">
-          <Text className="text-sm font-medium text-white mb-2">Tus Espacios de trabajo</Text>
-          <View className="space-y-3">
-            <View className="flex-row items-center gap-3">
-              <Feather name="user" size={18} color="#9ca3af" />
-              <Text className="text-sm text-white">{userName || "Usuario"}</Text>
+        <View className="px-6 py-4">
+          <Text className="text-lg font-medium text-white mb-4">Tus Espacios de trabajo</Text>
+          <View className="space-y-4">
+            <View className="flex-row items-center gap-4">
+              <Feather name="user" size={24} color="#9ca3af" />
+              <Text className="text-lg text-white">{userName || "Usuario"}</Text>
             </View>
-            <View className="flex-row items-center gap-3">
-              <Feather name="briefcase" size={18} color="#9ca3af" />
-              <Text className="text-sm text-white">Espacio de trabajo</Text>
+            <View className="flex-row items-center gap-4">
+              <Feather name="briefcase" size={24} color="#9ca3af" />
+              <Text className="text-lg text-white">Espacio de trabajo</Text>
             </View>
           </View>
         </View>
 
         {/* Account Section */}
-        <View className="px-4 py-3 border-t border-gray-800">
-          <Text className="text-sm font-medium text-white mb-2">Cuenta</Text>
-          <View className="space-y-3">
+        <View className="px-6 py-4 border-t border-gray-800">
+          <Text className="text-lg font-medium text-white mb-4">Cuenta</Text>
+          <View className="space-y-4">
             {/* Campo para ingresar el nombre */}
-            <View className="flex-row items-center gap-3">
-              <Feather name="edit" size={18} color="#9ca3af" />
+            <View className="flex-row items-center gap-4">
+              <Feather name="edit" size={24} color="#9ca3af" />
               <TextInput
-                className="flex-1 text-sm text-white p-2"
+                className="flex-1 text-lg text-white p-3"
                 placeholder="Ingresa tu nombre"
                 placeholderTextColor="#9ca3af"
                 value={userName}
@@ -88,27 +86,27 @@ export default function Settings(props: any) {
 
             {/* Cerrar sesión */}
             <TouchableOpacity
-              className="flex-row items-center gap-3 p-3"
+              className="flex-row items-center gap-4 p-4"
               onPress={handleLogout}
             >
-              <Feather name="log-out" size={18} color="#9ca3af" />
-              <Text className="text-sm text-white">Cerrar sesión</Text>
+              <Feather name="log-out" size={24} color="#9ca3af" />
+              <Text className="text-lg text-white">Cerrar sesión</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="flex-row items-center gap-3 p-3">
-              <Feather name="bell" size={18} color="#9ca3af" />
-              <Text className="text-sm text-white">Conviértete en evaluador de versiones beta</Text>
+            <TouchableOpacity className="flex-row items-center gap-4 p-4">
+              <Feather name="bell" size={24} color="#9ca3af" />
+              <Text className="text-lg text-white">Conviértete en evaluador de versiones beta</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Browser Management Section */}
-        <View className="px-4 py-3 border-t border-gray-800">
-          <TouchableOpacity className="flex-row items-center gap-3 p-3">
-            <Feather name="globe" size={18} color="#9ca3af" />
+        <View className="px-6 py-4 border-t border-gray-800">
+          <TouchableOpacity className="flex-row items-center gap-4 p-4">
+            <Feather name="globe" size={24} color="#9ca3af" />
             <View>
-              <Text className="text-sm text-white">Gestionar cuentas en navegador</Text>
-              <Text className="text-xs text-gray-400 mt-1">
-                Revisar las cuentas que tengan la sesión iniciada y quitarlas del navegador
+              <Text className="text-lg text-white">Gestionar cuentas en navegador</Text>
+              <Text className="text-sm text-gray-400 mt-2">
+                Revisar las cuentas que tengan la sesión iniciada
               </Text>
             </View>
           </TouchableOpacity>
