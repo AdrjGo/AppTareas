@@ -50,10 +50,9 @@ export default function Settings(props: any) {
         <View className="mt-2 items-center">
           <Text className="text-gray-400 text-sm">@{userName || "usuario"}</Text>
           <Text className="font-medium text-white">{userEmail}</Text>
-          <Text className="text-xs text-gray-400 mt-1">Usuario de Name</Text>
+          <Text className="text-xs text-gray-400 mt-1"></Text>
         </View>
       </View>
-
       {/* Main Content */}
       <ScrollView className="flex-1 bg-[#121212]">
         {/* Workspaces Section */}
