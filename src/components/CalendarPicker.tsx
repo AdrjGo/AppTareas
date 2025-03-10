@@ -25,30 +25,22 @@ function CalendarPicker({ selected, setSelected, minDate }: Props) {
           selected: {
             backgroundColor: "#52525b",
           },
-          day: {
-            color: "#000000",
-            fontWeight: "600",
-            fontSize: 16,
-          },
           day_label: {
             color: "#FFFFFF",
-            fontWeight: "bold",
           },
           year_selector_label: {
             color: "#ffffff",
-            fontWeight: "bold",
           },
           month_selector_label: {
             color: "#FFFFFF",
             textTransform: "uppercase",
-            fontWeight: "bold",
           },
           button_next: {
-            backgroundColor: "#27272a",
+            backgroundColor: "#FFFFFF",
             borderRadius: 10,
           },
           button_prev: {
-            backgroundColor: "#27272a",
+            backgroundColor: "#FFFFFF",
             borderRadius: 10,
           },
         }}
