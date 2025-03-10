@@ -85,7 +85,6 @@ export default function Calendar() {
             });
           }
         });
-
         setTasks(allTasks);
       }
     });
@@ -181,7 +180,6 @@ export default function Calendar() {
             <Text className="text-white text-xl font-bold mb-4 text-center">
               Seleccionar Fecha
             </Text>
-
             <View className="mb-4">
               <Text className="text-white text-lg mb-2">Año:</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
