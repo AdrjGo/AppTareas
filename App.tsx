@@ -22,6 +22,13 @@ import EditListModal from "./src/screens/EditListModal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CardTask from "@/components/CardTask";
 
+// import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+// GoogleSignin.configure({
+//   webClientId: '855081300107-77r0rqbj2g71pv4bmvmhdtltaofvd4ai.apps.googleusercontent.com', // Tu Web Client ID
+//   offlineAccess: true, // Opcional: permite solicitar un token de actualización
+// });
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 

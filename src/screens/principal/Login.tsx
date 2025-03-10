@@ -11,6 +11,7 @@ import {
 } from "firebase/auth";
 import { appFirebase } from "@/config/firebaseConfig";
 import ButtonLigth from "@/components/common/buttons/ButtonLigth";
+import LoginWithGoogle from "../LoginGoogle";
 
 const auth = getAuth(appFirebase);
 
@@ -89,6 +90,8 @@ export default function Login(props: any) {
           textSize="medium"
           onPress={handleRegister}
         />
+
+        <LoginWithGoogle />
       </View>
     </View>
   );
