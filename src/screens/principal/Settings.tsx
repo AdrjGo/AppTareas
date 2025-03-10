@@ -1,6 +1,6 @@
 import { Alert, Text, View, ScrollView, TouchableOpacity } from "react-native"
 import { getAuth, signOut } from "firebase/auth"
-import appFirebase from "@/config/firebaseConfig"
+import { appFirebase } from "@/config/firebaseConfig"
 import { Feather } from "@expo/vector-icons"
 
 export default function Settings(props: any) {

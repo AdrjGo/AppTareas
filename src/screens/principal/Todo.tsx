@@ -1,3 +1,4 @@
+import React from "react";
 import ButtonLigth from "@/components/common/buttons/ButtonLigth";
 import ButtonNative from "@/components/common/buttons/ButtonNative";
 import InputIcon from "@/components/common/inputs/InputIcon";
