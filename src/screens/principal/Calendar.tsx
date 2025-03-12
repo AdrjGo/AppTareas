@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-  Modal,
-} from "react-native";
+import { Text, View, FlatList, TouchableOpacity, ScrollView, Modal, Alert } from "react-native";
 import CalendarPicker from "@/components/CalendarPicker";
 import { DateType } from "react-native-ui-datepicker";
 import { auth, db } from "@/config/firebaseConfig";
-import { onValue, ref, update } from "firebase/database";
+import { onValue, ref, update, remove } from "firebase/database";
 import CardTask from "@/components/CardTask";
 import { formatDate } from "@/utils/formatDate";
+import { Swipeable } from "react-native-gesture-handler";
 
 type PriorityFilter = "todas" | "alta" | "medía" | "baja";
 type ViewMode = "día" | "mes";
@@ -143,6 +137,37 @@ export default function Calendar() {
     }
   };
 
+  const deleteTask = async (task: Task) => {
+    if (!user || !task.listId) return;
+    
+    try {
+      await remove(ref(db, `users/${user.uid}/lists/${task.listId}/tasks/${task.id}`));
+      setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
+    } catch (error) {
+      console.error("Error al eliminar la tarea:", error);
+    }
+  };
+
+  const renderRightActions = (task: Task) => {
+    return (
+      <TouchableOpacity
+        className="bg-red-500 justify-center items-center w-20"
+        onPress={() => {
+          Alert.alert(
+            "Eliminar Tarea",
+            "¿Estás seguro de que quieres eliminar esta tarea?",
+            [
+              { text: "Cancelar", style: "cancel" },
+              { text: "Eliminar", style: "destructive", onPress: () => deleteTask(task) }
+            ]
+          );
+        }}
+      >
+        <Text className="text-white font-bold">Eliminar</Text>
+      </TouchableOpacity>
+    );
+  };
+
   const filteredTasks = tasks.filter((task) => {
     if (!selected || !task.dateEndTask) return false;
 
@@ -166,6 +191,15 @@ export default function Calendar() {
   });
 
   const summary = getTaskSummary();
+
+  const renderTask = ({ item }: { item: Task }) => (
+    <Swipeable
+      renderRightActions={() => renderRightActions(item)}
+      overshootRight={false}
+    >
+      <CardTask item={item} handleCheck={() => handleCheck(item)} />
+    </Swipeable>
+  );
 
   return (
     <ScrollView className="flex-1">
@@ -322,13 +356,11 @@ export default function Calendar() {
         )}
       </View>
 
-      <View className="mx-2 mb-4">
+      <View className="mx-4 mb-4">
         <FlatList
           data={filteredTasks}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <CardTask item={item} handleCheck={() => handleCheck(item)} />
-          )}
+          renderItem={renderTask}
           scrollEnabled={false}
           nestedScrollEnabled={true}
           ListEmptyComponent={
