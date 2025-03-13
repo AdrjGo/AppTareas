@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   Text,
@@ -7,17 +7,17 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
-  Button,
 } from "react-native";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import { appFirebase } from "@/config/firebaseConfig";
 import { Feather } from "@expo/vector-icons";
-import { useEffect } from "react";
 
 export default function Settings(props: any) {
   const [userEmail, setUserEmail] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [isPaymentModalVisible, setPaymentModalVisible] = useState(false);
+  const [isThankYouModalVisible, setThankYouModalVisible] = useState(false);
+  const [isMember, setIsMember] = useState(false); // Estado para controlar si el usuario es miembro
   const [cardNumber, setCardNumber] = useState<string>("");
   const [expiryDate, setExpiryDate] = useState<string>("");
   const [cvv, setCvv] = useState<string>("");
@@ -27,17 +27,12 @@ export default function Settings(props: any) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserEmail(user.email || "");
-
-        if (!user.displayName) {
-          const emailPrefix = user.email ? user.email.split("@")[0] : "usuario";
-          setUserName(emailPrefix);
-        } else {
-          setUserName(user.displayName);
-        }
+        setUserName(user.displayName || user.email?.split("@")[0] || "usuario");
       }
     });
+
     return unsubscribe;
-  }, []);
+  }, [auth]);
 
   const handleLogout = async () => {
     try {
@@ -50,29 +45,22 @@ export default function Settings(props: any) {
   };
 
   const handlePayment = (plan: string) => {
-    try {
-      // Validar que todos los campos estén llenos
-      if (!cardNumber || !expiryDate || !cvv) {
-        Alert.alert("Error", "Por favor, completa todos los campos.");
-        return;
-      }
-
-      // Simular el procesamiento del pago
-      // Aquí puedes integrar la lógica real de pago, como Stripe
-      console.log("Procesando pago...");
-      console.log("Número de tarjeta:", cardNumber);
-      console.log("Fecha de expiración:", expiryDate);
-      console.log("CVV:", cvv);
-
-      // Mostrar mensaje de agradecimiento
-      Alert.alert("¡Gracias!", `Gracias por tu pago de ${plan}.`);
-
-      // Cerrar el modal
-      setPaymentModalVisible(false);
-    } catch (error) {
-      console.error("Error durante el pago:", error);
-      Alert.alert("Error", "Hubo un problema al procesar tu pago. Inténtalo de nuevo.");
+    if (!cardNumber || !expiryDate || !cvv) {
+      Alert.alert("Error", "Por favor, completa todos los campos.");
+      return;
     }
+
+    // Simular el procesamiento del pago
+    console.log("Procesando pago...", { cardNumber, expiryDate, cvv });
+
+    // Cerrar el modal de pago
+    setPaymentModalVisible(false);
+
+    // Mostrar el segundo pop-up de agradecimiento
+    setThankYouModalVisible(true);
+
+    // Actualizar el estado para indicar que el usuario es miembro
+    setIsMember(true);
   };
 
   return (
@@ -80,15 +68,12 @@ export default function Settings(props: any) {
       <View className="bg-[#1E2A47] p-6 items-center">
         <View className="w-24 h-24 bg-[#E25C33] rounded-full items-center justify-center">
           <Text className="text-2xl font-medium text-white">
-            {userName ? userName.charAt(0).toUpperCase() : "U"}
+            {userName.charAt(0).toUpperCase()}
           </Text>
         </View>
         <View className="mt-4 items-center">
-          <Text className="text-gray-400 text-lg">
-            @{userName || "usuario"}
-          </Text>
+          <Text className="text-gray-400 text-lg">@{userName}</Text>
           <Text className="font-medium text-white text-xl">{userEmail}</Text>
-          <Text className="text-xs text-gray-400 mt-2"></Text>
         </View>
       </View>
 
@@ -100,9 +85,7 @@ export default function Settings(props: any) {
           <View className="space-y-4 gap-4">
             <View className="flex-row items-center gap-4">
               <Feather name="user" size={24} color="#9ca3af" />
-              <Text className="text-lg text-white">
-                {userName || "Usuario"}
-              </Text>
+              <Text className="text-lg text-white">{userName}</Text>
             </View>
             <View className="flex-row items-center gap-4">
               <Feather name="briefcase" size={24} color="#9ca3af" />
@@ -114,7 +97,7 @@ export default function Settings(props: any) {
         <View className="px-6 py-4 border-t border-gray-800">
           <Text className="text-lg font-medium text-white mb-4">Cuenta</Text>
           <View className="gap-4">
-            <View className="flex-row items-center ">
+            <View className="flex-row items-center">
               <Feather name="edit" size={24} color="#9ca3af" />
               <TextInput
                 className="flex-1 text-lg text-white p-3"
@@ -124,47 +107,26 @@ export default function Settings(props: any) {
                 onChangeText={setUserName}
               />
             </View>
-
-            <TouchableOpacity className="flex-row items-center gap-4">
-              <Feather name="bell" size={24} color="#9ca3af" />
-              <Text className="text-lg text-white">
-                Conviértete en evaluador de versiones beta
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="flex-row items-center gap-4 py-2"
-              onPress={handleLogout}
-            >
+            <TouchableOpacity className="flex-row items-center gap-4 py-2" onPress={handleLogout}>
               <Feather name="log-out" size={24} color="#9ca3af" />
               <Text className="text-lg text-white">Cerrar sesión</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <View className=" border-t border-gray-800">
-          <TouchableOpacity className="flex-row items-center gap-4 p-5">
-            <Feather name="globe" size={24} color="#9ca3af" />
-            <View>
-              <Text className="text-lg text-white">
-                Gestionar cuentas en navegador
-              </Text>
-              <Text className="text-sm text-gray-400 mt-2">
-                Revisar las cuentas que tengan la sesión iniciada
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* Botón para abrir el pop-up de pago */}
+        {/* Botón "Conviértete en Premium" o "Ya eres miembro" */}
         <TouchableOpacity
-          className="flex-row items-center gap-4 p-5"
+          className="mx-6 my-4 p-4 bg-yellow-500 rounded-lg flex-row items-center justify-center shadow-lg"
           onPress={() => setPaymentModalVisible(true)}
+          disabled={isMember} // Deshabilitar el botón si el usuario ya es miembro
         >
-          <Feather name="credit-card" size={24} color="#9ca3af" />
-          <Text className="text-lg text-white">Método de pago</Text>
+          <Feather name="star" size={24} color="#121212" />
+          <Text className="ml-2 text-lg font-bold text-[#121212]">
+            {isMember ? "Ya eres miembro" : "¡Conviértete en Premium!"}
+          </Text>
         </TouchableOpacity>
 
-        {/* Pop-up de pago */}
+        {/* Modal de pago */}
         <Modal
           animationType="slide"
           transparent={true}
@@ -182,34 +144,71 @@ export default function Settings(props: any) {
               <TextInput
                 className="bg-white p-2 rounded mb-2"
                 placeholder="Número de tarjeta"
+                keyboardType="numeric"
                 value={cardNumber}
                 onChangeText={setCardNumber}
               />
               <TextInput
                 className="bg-white p-2 rounded mb-2"
                 placeholder="Fecha de expiración (MM/YY)"
+                keyboardType="numeric"
+                maxLength={5}
                 value={expiryDate}
                 onChangeText={setExpiryDate}
               />
               <TextInput
                 className="bg-white p-2 rounded mb-4"
                 placeholder="CVV"
+                keyboardType="numeric"
+                maxLength={3}
                 value={cvv}
                 onChangeText={setCvv}
               />
 
-              <Button
-                title="Pagar $10 por mes"
+              {/* Botones de pago */}
+              <TouchableOpacity
+                className="bg-blue-500 p-3 rounded mb-2"
                 onPress={() => handlePayment("$10 por mes")}
-              />
-              <Button
-                title="Pagar $100 por año"
+              >
+                <Text className="text-white text-center">Pagar $10 por mes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="bg-blue-500 p-3 rounded mb-2"
                 onPress={() => handlePayment("$100 por año")}
-              />
-              <Button
-                title="Cerrar"
+              >
+                <Text className="text-white text-center">Pagar $100 por año</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="bg-red-500 p-3 rounded"
                 onPress={() => setPaymentModalVisible(false)}
-              />
+              >
+                <Text className="text-white text-center">Cerrar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        {/* Segundo pop-up de agradecimiento */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isThankYouModalVisible}
+          onRequestClose={() => setThankYouModalVisible(false)}
+        >
+          <View className="flex-1 justify-center items-center bg-black/50">
+            <View className="bg-[#1E2A47] p-6 rounded-lg w-80">
+              <Text className="text-lg font-medium text-white mb-4">
+                ¡Gracias por tu pago!
+              </Text>
+              <Text className="text-white mb-4">
+                Tu suscripción ha sido procesada exitosamente.
+              </Text>
+              <TouchableOpacity
+                className="bg-blue-500 p-3 rounded"
+                onPress={() => setThankYouModalVisible(false)}
+              >
+                <Text className="text-white text-center">Cerrar</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
